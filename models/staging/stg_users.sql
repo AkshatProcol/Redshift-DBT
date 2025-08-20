@@ -1,0 +1,50 @@
+{{
+  config(
+    materialized='view'
+  )
+}}
+
+SELECT 
+  id,
+  first_name,
+  last_name,
+  gender,
+  address,
+  category,
+  email,
+  phone,
+  is_phone_verified,
+  city_id,
+  company_id,
+  profile_pic_url,
+  status,
+  created_at,
+  updated_at,
+  role,
+  firm_name,
+  is_email_verified,
+  should_receive_sms,
+  email_verified,
+  update_remarks,
+  user_access_right_ids,
+  should_receive_email,
+  referral_code,
+  deleted_at,
+  adderss,
+  should_receive_sims,
+  user_access_right_id,
+  should_recieve_email,
+  referal_code,
+  other_details,
+  send_whatsapp_msg,
+  team_identifiers,
+  mfa_secret,
+  is_mfa_enabled,
+  is_subscribed_to_zones,
+  created_by_user,
+  ip_info,
+  session_id,
+  access_mode,
+  terms_and_policy_accepted,
+  tnc_and_policy_log
+FROM {{ source('staging', 'users') }}

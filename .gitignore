@@ -1,0 +1,50 @@
+# DBT generated files
+target/
+dbt_packages/
+logs/
+
+# Python virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# DBT specific
+package-lock.yml
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3

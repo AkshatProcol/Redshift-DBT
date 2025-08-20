@@ -1,0 +1,34 @@
+dbt_time:
+  target: dev
+  outputs:
+    dev:
+      type: redshift
+      host: "default-workgroup.885373794985.ap-south-1.redshift-serverless.amazonaws.com"
+      user: "admin"
+      password: "FLWGTnvecu049*%"
+      port: 5439
+      dbname: "dev"
+      schema: "staging"
+      threads: 2
+      keepalives_idle: 0
+      connect_timeout: 60
+      retry_after_interval: 1
+      search_path: "staging"
+      timeout: 300
+      statement_timeout: 300
+      
+    prod:
+      type: redshift
+      host: "default-workgroup.885373794985.ap-south-1.redshift-serverless.amazonaws.com"
+      user: "admin"
+      password: "FLWGTnvecu049*%"
+      port: 5439
+      dbname: "dev"
+      schema: "prod_poc"
+      threads: 2
+      keepalives_idle: 0
+      connect_timeout: 60
+      retry_after_interval: 1
+      search_path: "prod_poc"
+      timeout: 300
+      statement_timeout: 300

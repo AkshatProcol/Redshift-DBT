@@ -1,0 +1,53 @@
+{{
+  config(
+    materialized='view'
+  )
+}}
+
+SELECT 
+  id,
+  name,
+  image_url,
+  category,
+  address,
+  city_id,
+  coordinates,
+  phone,
+  email,
+  status,
+  rating,
+  email_extension,
+  created_at,
+  updated_at,
+  pan_no,
+  fssai_code,
+  gst_no,
+  created_by,
+  is_verified,
+  broker_for,
+  owner_name,
+  year_of_establishment,
+  tan_number,
+  number_of_employees,
+  document_images,
+  update_remarks,
+  invited_by,
+  domain,
+  trade_mode,
+  app_configuration_id,
+  category_type,
+  allowed_modules,
+  supplier_type,
+  website,
+  company_initials,
+  company_status,
+  created_by_user,
+  created_for_workspace,
+  gst_verification,
+  misc,
+  sso_enabled,
+  trade_requests_count,
+  intake_requests_count,
+  tax_type_country_mapping_id,
+  recommendation_identifier
+FROM {{ source('staging', 'companies') }}

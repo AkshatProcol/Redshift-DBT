@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: fact_vendor
+    description: "Comprehensive vendor data with POCs as separate rows"
+    columns:
+      - name: vendor_id_poc_id
+        description: "Composite unique key combining vendor_id and poc_id"
+        tests:
+          - not_null
+          - unique
+      - name: client_company_id
+        description: "Client company ID (hardcoded as 12855)"
+        tests:
+          - not_null
+      - name: vendor_id
+        description: "Vendor company ID"
+        tests:
+          - not_null
+      - name: vendor_name
+        description: "Vendor company name"
+      - name: vendor_email
+        description: "Vendor company email"
+      - name: primary_contact_phone
+        description: "Primary contact phone (company or POC)"
+      - name: gst_no
+        description: "GST number"
+      - name: city_name
+        description: "City name"
+      - name: country_name
+        description: "Country name"
+      - name: address
+        description: "Company address"
+      - name: vendor_created_at
+        description: "Vendor company creation date (epoch timestamp as bigint)"
+      - name: vendor_type
+        description: "Type of vendor (Broker Created Firm, Selling Firm, etc.)"
+      - name: joining_status_label
+        description: "Human readable joining status"
+      - name: category_names
+        description: "Array of product category names"
+      - name: invited_by
+        description: "User ID who invited the vendor"
+      - name: invited_by_name
+        description: "Name of user who invited the vendor"
+      - name: invited_by_email
+        description: "Email of user who invited the vendor"
+      - name: poc_id
+        description: "Point of Contact user ID"
+      - name: poc_name
+        description: "Point of Contact name"
+      - name: poc_email
+        description: "Point of Contact email"
+      - name: poc_phone
+        description: "Point of Contact phone"
+      - name: tag_names
+        description: "Array of tag names associated with vendor"
+      - name: preferred_item_ids
+        description: "Array of preferred item IDs"
+      - name: score_value
+        description: "Vendor score value"
+      - name: vendor_code
+        description: "Vendor code"
+      - name: network_joined_date
+        description: "Date when vendor joined the network (epoch timestamp as bigint)"
+      - name: source
+        description: "Source of vendor mapping"
+      - name: is_verified
+        description: "Whether vendor is verified"
+      - name: misc
+        description: "Miscellaneous vendor data"
+      - name: archived_at
+        description: "Archival timestamp (epoch timestamp as bigint)"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"

@@ -1,0 +1,470 @@
+version: 2
+
+sources:
+  - name: staging
+    description: "Staging schema tables from Redshift"
+    database: "dev"
+    schema: "staging"
+    
+    tables:
+      - name: buyer_seller_company_mappings
+        description: "Vendor mappings for client companies"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: client_company_id
+            description: "Client company ID"
+          - name: dealing_with_company_id
+            description: "Vendor company ID"
+          - name: vendor_code
+            description: "Vendor code"
+          - name: status
+            description: "Mapping status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: source
+            description: "Source of mapping"
+          - name: invited_by
+            description: "User who invited the vendor"
+          - name: auto_discount
+            description: "Auto discount configuration"
+          - name: vrp_code
+            description: "VRP code"
+          - name: integration_status
+            description: "Integration status"
+          - name: meta_data
+            description: "Additional metadata"
+          - name: dms_upload_status
+            description: "DMS upload status"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: teams
+        description: "Company teams and their product categories"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: company_id
+            description: "Company ID"
+          - name: name
+            description: "Team name"
+          - name: status
+            description: "Team status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: team_type
+            description: "Team type"
+          - name: zone_id
+            description: "Zone ID"
+          - name: other_details
+            description: "Other team details"
+          - name: product_category_ids
+            description: "Array of product category IDs"
+          - name: buyer_hub_ids
+            description: "Buyer hub IDs"
+          - name: purchase_group_ids
+            description: "Purchase group IDs"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: team_members
+        description: "Team members and their associations"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: team_id
+            description: "Team ID"
+          - name: user_id
+            description: "User ID"
+          - name: role
+            description: "Team member role"
+          - name: status
+            description: "Team member status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: designation_id
+            description: "Designation ID"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: companies
+        description: "Company information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Company name"
+          - name: image_url
+            description: "Company image URL"
+          - name: category
+            description: "Company category"
+          - name: address
+            description: "Company address"
+          - name: city_id
+            description: "City ID"
+          - name: coordinates
+            description: "Company coordinates"
+          - name: phone
+            description: "Company phone"
+          - name: email
+            description: "Company email"
+          - name: status
+            description: "Company status"
+          - name: rating
+            description: "Company rating"
+          - name: email_extension
+            description: "Email extension"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: pan_no
+            description: "PAN number"
+          - name: fssai_code
+            description: "FSSAI code"
+          - name: gst_no
+            description: "GST number"
+          - name: created_by
+            description: "User who created the company"
+          - name: is_verified
+            description: "Whether company is verified"
+          - name: broker_for
+            description: "Broker information"
+          - name: owner_name
+            description: "Company owner name"
+          - name: year_of_establishment
+            description: "Year of establishment"
+          - name: tan_number
+            description: "TAN number"
+          - name: number_of_employees
+            description: "Number of employees"
+          - name: document_images
+            description: "Document images"
+          - name: update_remarks
+            description: "Update remarks"
+          - name: invited_by
+            description: "User who invited the company"
+          - name: domain
+            description: "Company domain"
+          - name: trade_mode
+            description: "Trade mode"
+          - name: app_configuration_id
+            description: "App configuration ID"
+          - name: category_type
+            description: "Category type"
+          - name: allowed_modules
+            description: "Allowed modules"
+          - name: supplier_type
+            description: "Supplier type"
+          - name: website
+            description: "Company website"
+          - name: company_initials
+            description: "Company initials"
+          - name: company_status
+            description: "Company status"
+          - name: created_by_user
+            description: "User who created the company"
+          - name: created_for_workspace
+            description: "Workspace created for"
+          - name: gst_verification
+            description: "GST verification status"
+          - name: misc
+            description: "Miscellaneous company data including score"
+          - name: sso_enabled
+            description: "Whether SSO is enabled"
+          - name: trade_requests_count
+            description: "Trade requests count"
+          - name: intake_requests_count
+            description: "Intake requests count"
+          - name: tax_type_country_mapping_id
+            description: "Tax type country mapping ID"
+          - name: recommendation_identifier
+            description: "Recommendation identifier"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: cities
+        description: "City information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "City name"
+          - name: coordinates
+            description: "City coordinates"
+          - name: status
+            description: "City status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: apmc_configuration_id
+            description: "APMC configuration ID"
+          - name: state_id
+            description: "State ID"
+          - name: country_id
+            description: "Country ID"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: countries
+        description: "Country information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Country name"
+          - name: country_code
+            description: "Country code"
+          - name: phone_prefix
+            description: "Phone prefix"
+          - name: phone_number_length
+            description: "Phone number length"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+          - name: flag_url
+            description: "Flag URL"
+          - name: config
+            description: "Configuration data"
+          - name: send_otp_allowed
+            description: "Whether OTP sending is allowed"
+            
+      - name: product_categories
+        description: "Product category information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Category name"
+          - name: ancestry
+            description: "Category ancestry"
+          - name: status
+            description: "Category status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: hierarchy_type
+            description: "Hierarchy type"
+          - name: alias
+            description: "Category alias"
+          - name: origins
+            description: "Category origins"
+          - name: gst
+            description: "GST rate"
+          - name: image_url
+            description: "Category image URL"
+          - name: category_type
+            description: "Category type"
+          - name: quality_params
+            description: "Quality parameters"
+          - name: company_id
+            description: "Company ID"
+          - name: is_default_category
+            description: "Whether it's a default category"
+          - name: category_code
+            description: "Category code"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: user_company_mappings
+        description: "User to company mappings"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: user_id
+            description: "User ID"
+          - name: company_id
+            description: "Company ID"
+          - name: status
+            description: "Mapping status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: trade_identifier
+            description: "Trade identifier"
+          - name: designation_id
+            description: "Designation ID"
+          - name: erp_id
+            description: "ERP ID"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: users
+        description: "User information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: first_name
+            description: "User first name"
+          - name: last_name
+            description: "User last name"
+          - name: gender
+            description: "User gender"
+          - name: address
+            description: "User address"
+          - name: category
+            description: "User category"
+          - name: email
+            description: "User email"
+          - name: phone
+            description: "User phone"
+          - name: is_phone_verified
+            description: "Whether phone is verified"
+          - name: city_id
+            description: "City ID"
+          - name: company_id
+            description: "Company ID"
+          - name: profile_pic_url
+            description: "Profile picture URL"
+          - name: status
+            description: "User status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: role
+            description: "User role"
+          - name: firm_name
+            description: "Firm name"
+          - name: is_email_verified
+            description: "Whether email is verified"
+          - name: should_receive_sms
+            description: "Whether user should receive SMS"
+          - name: email_verified
+            description: "Email verification status"
+          - name: update_remarks
+            description: "Update remarks"
+          - name: user_access_right_ids
+            description: "User access right IDs"
+          - name: should_receive_email
+            description: "Whether user should receive email"
+          - name: referral_code
+            description: "Referral code"
+          - name: deleted_at
+            description: "Deletion timestamp"
+          - name: adderss
+            description: "User address (alternative spelling)"
+          - name: should_receive_sims
+            description: "Whether user should receive SIMs"
+          - name: user_access_right_id
+            description: "User access right ID"
+          - name: should_recieve_email
+            description: "Whether user should receive email (alternative spelling)"
+          - name: referal_code
+            description: "Referral code (alternative spelling)"
+          - name: other_details
+            description: "Other user details"
+          - name: send_whatsapp_msg
+            description: "Whether to send WhatsApp messages"
+          - name: team_identifiers
+            description: "Team identifiers"
+          - name: mfa_secret
+            description: "MFA secret"
+          - name: is_mfa_enabled
+            description: "Whether MFA is enabled"
+          - name: is_subscribed_to_zones
+            description: "Whether subscribed to zones"
+          - name: created_by_user
+            description: "User who created this user"
+          - name: ip_info
+            description: "IP information"
+          - name: session_id
+            description: "Session ID"
+          - name: access_mode
+            description: "Access mode"
+          - name: terms_and_policy_accepted
+            description: "Terms and policy acceptance status"
+          - name: tnc_and_policy_log
+            description: "Terms and conditions policy log"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: taggings
+        description: "Tag associations"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: tag_id
+            description: "Tag ID"
+          - name: taggable_type
+            description: "Type of tagged object"
+          - name: taggable_id
+            description: "ID of tagged object"
+          - name: status
+            description: "Tagging status"
+          - name: tagged_by_id
+            description: "User who created the tagging"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: tags
+        description: "Tag information"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Tag name"
+          - name: creator_company_mapping_id
+            description: "Creator company mapping ID"
+          - name: status
+            description: "Tag status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: visibility_level_type
+            description: "Visibility level type"
+          - name: visibility_level_id
+            description: "Visibility level ID"
+          - name: user_company_mapping_id
+            description: "User company mapping ID"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: preferred_vendor_item_mappings
+        description: "Preferred vendor item mappings"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: item_type
+            description: "Item type"
+          - name: item_id
+            description: "Item ID"
+          - name: company_id
+            description: "Company ID"
+          - name: status
+            description: "Mapping status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
