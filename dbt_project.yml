@@ -33,4 +33,4 @@ vars:
   # Add any project-level variables here
   redshift_database: "dev"
   redshift_schema_staging: "staging"
-  redshift_schema_prod: "prod_poc"
+  redshift_schema_prod: "public"

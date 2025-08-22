@@ -1,7 +1,7 @@
 {{
   config(
     materialized='incremental',
-    schema='prod_poc',
+    schema='public',
     unique_key='vendor_id_poc_id',
     incremental_strategy='merge',
     merge_update_columns=[
