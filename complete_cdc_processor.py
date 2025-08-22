@@ -284,32 +284,33 @@ class CompleteCDCProcessor:
                 change_type = record.get('change_type', 'UPDATE')
                 
                 try:
-                    if change_type == 'INSERT' or record.get('is_new_record', False):
-                        # INSERT new record into public schema
-                        placeholders = ', '.join(['%s'] * len(column_names))
-                        columns_str = ', '.join(column_names)
-                        
-                        insert_sql = f"""
-                        INSERT INTO public.{table_name} ({columns_str})
-                        VALUES ({placeholders})
-                        ON CONFLICT (id) DO UPDATE SET
-                        {', '.join([f'{col} = EXCLUDED.{col}' for col in column_names if col != 'id'])}
-                        """
-                        
-                        values = [record.get(col) for col in column_names]
-                        cursor.execute(insert_sql, values)
-                        
-                    else:
-                        # UPDATE existing record in public schema
+                    # Use simple INSERT/UPDATE approach for Redshift compatibility
+                    record_id = record.get('id')
+                    
+                    # First check if record exists in public schema
+                    cursor.execute(f"SELECT COUNT(*) FROM public.{table_name} WHERE id = %s", (record_id,))
+                    exists = cursor.fetchone()[0] > 0
+                    
+                    if exists:
+                        # UPDATE existing record
                         update_columns = [col for col in column_names if col != 'id']
                         update_sql = f"""
                         UPDATE public.{table_name} 
                         SET {', '.join([f'{col} = %s' for col in update_columns])}
                         WHERE id = %s
                         """
-                        
                         values = [record.get(col) for col in update_columns] + [record_id]
                         cursor.execute(update_sql, values)
+                    else:
+                        # INSERT new record
+                        placeholders = ', '.join(['%s'] * len(column_names))
+                        columns_str = ', '.join(column_names)
+                        insert_sql = f"""
+                        INSERT INTO public.{table_name} ({columns_str})
+                        VALUES ({placeholders})
+                        """
+                        values = [record.get(col) for col in column_names]
+                        cursor.execute(insert_sql, values)
                     
                     sync_success += 1
                     
