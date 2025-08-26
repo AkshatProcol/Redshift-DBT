@@ -129,30 +129,64 @@ class CompleteCDCProcessor:
                 conn.close()
             return []
     
-    def compare_record_columns(self, table_name: str, staging_record: Dict, columns: List[Dict]) -> List[str]:
-        """Compare each column of staging record with public schema"""
+    def get_dictionary_columns(self, table_name: str) -> Set[str]:
+        """Get only columns that are mapped in dictionary - OPTIMIZATION"""
+        if table_name not in self.mapping:
+            return set()
+        
+        dictionary_columns = set(self.mapping[table_name].keys())
+        print(f"      📚 Dictionary columns for {table_name}: {len(dictionary_columns)} (vs all columns)")
+        return dictionary_columns
+    
+    def compare_record_columns(self, table_name: str, staging_record: Dict, columns: List[Dict]) -> Tuple[List[str], int]:
+        """Compare each column of staging record with public schema - HYBRID APPROACH"""
+        # 🚀 OPTIMIZATION: Get dictionary-mapped columns first
+        dictionary_columns = self.get_dictionary_columns(table_name)
+        
         if staging_record.get('is_new_record', False):
-            # New record - all columns are "changed"
-            return [col['name'] for col in columns if col['name'] not in ['created_at', 'updated_at', 'change_type', 'is_new_record']]
+            # New record - only return dictionary-mapped columns as "fact table changes"
+            # But public sync will handle ALL columns
+            changed_cols = [col['name'] for col in columns 
+                           if col['name'] in dictionary_columns and 
+                           col['name'] not in ['created_at', 'updated_at', 'change_type', 'is_new_record']]
+            return changed_cols, len(changed_cols)
         
         # Get corresponding record from public schema
         public_record = self.get_public_record(table_name, staging_record['id'])
         if not public_record:
-            return [col['name'] for col in columns if col['name'] not in ['created_at', 'updated_at', 'change_type', 'is_new_record']]
+            # No public record - only return dictionary-mapped columns as "fact table changes"
+            changed_cols = [col['name'] for col in columns 
+                           if col['name'] in dictionary_columns and 
+                           col['name'] not in ['created_at', 'updated_at', 'change_type', 'is_new_record']]
+            return changed_cols, len(changed_cols)
         
-        changed_columns = []
+        # 🔄 HYBRID APPROACH: 
+        # 1. Only compare dictionary columns for FACT TABLE updates (optimization)
+        # 2. But public sync will handle ALL columns (data consistency)
+        
+        fact_table_changes = []  # Only dictionary-mapped columns
+        columns_compared = 0
+        
+        # 🚀 OPTIMIZATION: Only compare dictionary-mapped columns for fact table targeting
         for col in columns:
             col_name = col['name']
             if col_name in ['created_at', 'updated_at', 'change_type', 'is_new_record']:
                 continue
             
+            # SKIP non-dictionary columns for FACT TABLE updates
+            if col_name not in dictionary_columns:
+                continue
+                
+            columns_compared += 1
             staging_value = staging_record.get(col_name)
             public_value = public_record.get(col_name)
             
             if self.values_different(staging_value, public_value, col['type']):
-                changed_columns.append(col_name)
-                
-        return changed_columns
+                fact_table_changes.append(col_name)
+        
+        print(f"      ⚡ Optimized: compared {columns_compared} dictionary columns for fact updates (vs {len(columns)} total)")
+        print(f"      📊 Note: Public sync will handle ALL columns for data consistency")
+        return fact_table_changes, columns_compared
     
     def get_public_record(self, table_name: str, record_id: Any) -> Optional[Dict]:
         """Get a specific record from public schema"""
@@ -249,10 +283,71 @@ class CompleteCDCProcessor:
             print(f"❌ Exception updating {fact_table}: {e}")
             return False
     
+    def find_existing_record(self, table_name: str, record: Dict, cursor) -> Tuple[bool, str]:
+        """
+        🚀 SMART RECORD MATCHING - Handles NULL IDs with composite keys
+        
+        For records with NULL IDs, uses alternative unique combinations:
+        - buyer_seller_company_mappings: client_company_id + dealing_with_company_id  
+        - companies: email (should be unique)
+        - users: email (should be unique)
+        - others: use available unique combinations
+        """
+        record_id = record.get('id')
+        
+        if record_id is not None:
+            # Standard ID-based matching
+            cursor.execute(f"SELECT COUNT(*) FROM public.{table_name} WHERE id = %s", (record_id,))
+            exists = cursor.fetchone()[0] > 0
+            condition = f"id = {record_id}"
+            return exists, condition
+        
+        # NULL ID - use table-specific composite keys
+        if table_name == 'buyer_seller_company_mappings':
+            # Match by client + vendor combination
+            client_id = record.get('client_company_id')
+            vendor_id = record.get('dealing_with_company_id')
+            if client_id and vendor_id:
+                cursor.execute(f"""
+                    SELECT COUNT(*) FROM public.{table_name} 
+                    WHERE client_company_id = %s AND dealing_with_company_id = %s
+                """, (client_id, vendor_id))
+                exists = cursor.fetchone()[0] > 0
+                condition = f"client_company_id = {client_id} AND dealing_with_company_id = {vendor_id}"
+                return exists, condition
+                
+        elif table_name == 'companies':
+            # Match by email (should be unique)
+            email = record.get('email')
+            if email:
+                cursor.execute(f"SELECT COUNT(*) FROM public.{table_name} WHERE email = %s", (email,))
+                exists = cursor.fetchone()[0] > 0
+                condition = f"email = '{email}'"
+                return exists, condition
+                
+        elif table_name == 'users':
+            # Match by email (should be unique)  
+            email = record.get('email')
+            if email:
+                cursor.execute(f"SELECT COUNT(*) FROM public.{table_name} WHERE email = %s", (email,))
+                exists = cursor.fetchone()[0] > 0
+                condition = f"email = '{email}'"
+                return exists, condition
+        
+        # Fallback: assume new record if no matching strategy
+        return False, "1=0"  # Always false condition
+    
     def sync_public_schema(self, table_name: str, changed_records: List[Dict]) -> bool:
         """
         🔄 CRITICAL: Sync public schema with staging data after processing
         This ensures public schema stays current for future comparisons
+        
+        ⭐ HYBRID APPROACH:
+        - Fact table updates: Only dictionary-mapped columns (optimization)  
+        - Public sync: ALL columns (data consistency)
+        
+        This guarantees that ALL column changes reach public schema,
+        even if they don't trigger fact table updates.
         """
         if not changed_records:
             return True
@@ -287,19 +382,35 @@ class CompleteCDCProcessor:
                     # Use simple INSERT/UPDATE approach for Redshift compatibility
                     record_id = record.get('id')
                     
-                    # First check if record exists in public schema
-                    cursor.execute(f"SELECT COUNT(*) FROM public.{table_name} WHERE id = %s", (record_id,))
-                    exists = cursor.fetchone()[0] > 0
+                    # 🚀 IMPROVED: Smart record matching for NULL ID handling
+                    exists, existing_record_condition = self.find_existing_record(table_name, record, cursor)
+                    
+                    if record_id is not None:
+                        print(f"      🔍 Matching by ID: {record_id} ({'found' if exists else 'not found'})")
+                    else:
+                        print(f"      🔍 Matching by composite key ({'found' if exists else 'not found'})")
                     
                     if exists:
-                        # UPDATE existing record
+                        # UPDATE existing record using smart condition matching
                         update_columns = [col for col in column_names if col != 'id']
-                        update_sql = f"""
-                        UPDATE public.{table_name} 
-                        SET {', '.join([f'{col} = %s' for col in update_columns])}
-                        WHERE id = %s
-                        """
-                        values = [record.get(col) for col in update_columns] + [record_id]
+                        
+                        if record_id is not None:
+                            # Standard ID-based update
+                            update_sql = f"""
+                            UPDATE public.{table_name} 
+                            SET {', '.join([f'{col} = %s' for col in update_columns])}
+                            WHERE id = %s
+                            """
+                            values = [record.get(col) for col in update_columns] + [record_id]
+                        else:
+                            # Composite key-based update
+                            update_sql = f"""
+                            UPDATE public.{table_name} 
+                            SET {', '.join([f'{col} = %s' for col in update_columns])}
+                            WHERE {existing_record_condition}
+                            """
+                            values = [record.get(col) for col in update_columns]
+                            
                         cursor.execute(update_sql, values)
                     else:
                         # INSERT new record
@@ -351,6 +462,7 @@ class CompleteCDCProcessor:
         
         total_records_analyzed = 0
         total_columns_compared = 0
+        total_dictionary_columns_compared = 0  # 🚀 Track optimization impact
         total_changes_detected = 0
         all_targeted_updates = {}
         tables_to_sync = {}
@@ -378,7 +490,7 @@ class CompleteCDCProcessor:
                 record_id = record.get('id', 'Unknown')
                 change_type = record.get('change_type', 'Unknown')
                 
-                changed_columns = self.compare_record_columns(table, record, columns)
+                changed_columns, dict_columns_compared = self.compare_record_columns(table, record, columns)
                 
                 if changed_columns:
                     total_changes_detected += len(changed_columns)
@@ -395,7 +507,8 @@ class CompleteCDCProcessor:
                         all_targeted_updates[fact_table].update(fact_columns)
                 
                 total_records_analyzed += 1
-                total_columns_compared += len(columns)
+                total_columns_compared += len(columns)  # Total possible columns
+                total_dictionary_columns_compared += dict_columns_compared  # Actual columns compared
         
         # Phase 2: Fact Table Updates  
         if all_targeted_updates:
@@ -437,7 +550,10 @@ class CompleteCDCProcessor:
         print(f"\n🎉 Complete CDC Processing Finished!")
         print(f"⏱️  Total Duration: {duration.total_seconds():.2f} seconds")
         print(f"🔬 Records Analyzed: {total_records_analyzed}")
-        print(f"📊 Columns Compared: {total_columns_compared}")
+        print(f"📊 Total Possible Columns: {total_columns_compared}")
+        print(f"⚡ Dictionary Columns Compared: {total_dictionary_columns_compared}")
+        efficiency = ((total_columns_compared - total_dictionary_columns_compared) / max(total_columns_compared, 1)) * 100
+        print(f"🚀 Optimization Efficiency: {efficiency:.1f}% columns skipped")
         print(f"🎯 Changes Detected: {total_changes_detected}")
         print(f"✅ Fact Tables Updated: {len(successful_updates)}")
         print(f"📊 Public Tables Synced: {len(sync_successful)}")
@@ -452,7 +568,9 @@ class CompleteCDCProcessor:
             'duration': duration.total_seconds(),
             'phase_1_analysis': {
                 'records_analyzed': total_records_analyzed,
-                'columns_compared': total_columns_compared,
+                'total_possible_columns': total_columns_compared,
+                'dictionary_columns_compared': total_dictionary_columns_compared,
+                'optimization_efficiency_percent': ((total_columns_compared - total_dictionary_columns_compared) / max(total_columns_compared, 1)) * 100,
                 'changes_detected': total_changes_detected
             },
             'phase_2_fact_updates': {
