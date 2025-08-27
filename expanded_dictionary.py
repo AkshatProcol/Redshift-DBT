@@ -445,7 +445,8 @@ fact_table_mapping = {
     # =====================================================
     "bid_trade_products": {
         "id": {
-            "fact_bid_trade_products": "id"
+            "fact_bid_trade_products": "id",
+            "dim_bid_trade_products_details": "id"
         },
         "trade_product_id": {
             "fact_bid_trade_products": "trade_product_id"
@@ -481,16 +482,39 @@ fact_table_mapping = {
             "fact_bid_trade_products": "ancestry"
         },
         "created_at": {
-            "fact_bid_trade_products": "created_at"
+            "fact_bid_trade_products": "created_at",
+            "dim_bid_trade_products_details": "created_at"
         },
         "updated_at": {
-            "fact_bid_trade_products": "updated_at"
+            "fact_bid_trade_products": "updated_at",
+            "dim_bid_trade_products_details": "updated_at"
         },
         "company_id": {
             "fact_bid_trade_products": "company_id,company_name"
         },
         "score": {
             "fact_bid_trade_products": "score"
+        },
+        "quality_params": {
+            "dim_bid_trade_products_details": "quality_params"
+        },
+        "images": {
+            "dim_bid_trade_products_details": "images"
+        },
+        "remarks": {
+            "dim_bid_trade_products_details": "remarks"
+        },
+        "price_breakup_json": {
+            "dim_bid_trade_products_details": "price_breakup_json"
+        },
+        "other_details": {
+            "dim_bid_trade_products_details": "other_details"
+        },
+        "meta_data": {
+            "dim_bid_trade_products_details": "meta_data"
+        },
+        "template_data": {
+            "dim_bid_trade_products_details": "template_data"
         }
     },
     
