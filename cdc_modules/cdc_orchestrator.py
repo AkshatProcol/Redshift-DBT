@@ -18,7 +18,8 @@ class CDCOrchestrator:
         self.staging_tables = [
             'companies', 'buyer_seller_company_mappings', 'users', 'teams',
             'team_members', 'cities', 'countries', 'product_categories',
-            'user_company_mappings', 'taggings', 'tags', 'preferred_vendor_item_mappings'
+            'user_company_mappings', 'taggings', 'tags', 'preferred_vendor_item_mappings',
+            'bids', 'bid_trades'
         ]
         
         # Initialize components

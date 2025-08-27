@@ -73,3 +73,101 @@ models:
         description: "Archival timestamp (epoch timestamp as bigint)"
       - name: updated_at
         description: "Last update timestamp for incremental processing"
+        
+  - name: fact_bids
+    description: "Comprehensive bid data with user and company details"
+    columns:
+      - name: id
+        description: "Bid ID (unique key)"
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: "User who placed the bid"
+        tests:
+          - not_null
+      - name: status
+        description: "Bid status"
+      - name: delivery_type
+        description: "Delivery type for the bid"
+      - name: company_id
+        description: "Company placing the bid"
+      - name: product_sample_id
+        description: "Product sample ID"
+      - name: city_id
+        description: "City ID for delivery"
+      - name: broker_id
+        description: "Broker user ID"
+      - name: broker_company_id
+        description: "Broker company ID"
+      - name: applicable_apmc_product_config_id
+        description: "APMC product configuration ID"
+      - name: contract_id
+        description: "Associated contract ID"
+      - name: session_id
+        description: "Trading session ID"
+      - name: approval_status
+        description: "Bid approval status"
+      - name: lock_version
+        description: "Version for optimistic locking"
+      - name: created_at
+        description: "Creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: end_time
+        description: "Bid end time"
+      - name: start_time
+        description: "Bid start time"
+      - name: closed_at
+        description: "Bid closure timestamp"
+      - name: placed_at
+        description: "Bid placement timestamp"
+      - name: negotiable
+        description: "Whether the bid is negotiable"
+      - name: is_multi_product
+        description: "Whether this is a multi-product bid"
+      - name: price
+        description: "Bid price"
+      - name: quantity
+        description: "Bid quantity"
+      - name: gst
+        description: "GST amount"
+      - name: rank_price
+        description: "Ranked price for comparison"
+      - name: final_price
+        description: "Final negotiated price"
+      - name: amount
+        description: "Total bid amount"
+      - name: score
+        description: "Bid score for ranking"
+      - name: user_first_name
+        description: "First name of the user who placed the bid"
+      - name: user_last_name
+        description: "Last name of the user who placed the bid"
+      - name: company_name
+        description: "Name of the company placing the bid"
+      - name: city_name
+        description: "Name of the delivery city"
+        
+  - name: fact_bid_trades
+    description: "Bid trading and forwarding activity data"
+    columns:
+      - name: id
+        description: "Bid trade ID (unique key)"
+        tests:
+          - not_null
+          - unique
+      - name: trade_request_id
+        description: "Associated trade request ID"
+      - name: bid_id
+        description: "Associated bid ID"
+        tests:
+          - not_null
+      - name: forwarded_by
+        description: "User ID who forwarded the bid trade"
+      - name: status
+        description: "Bid trade status"
+      - name: created_at
+        description: "Creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"

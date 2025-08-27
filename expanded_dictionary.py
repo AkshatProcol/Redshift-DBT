@@ -1,6 +1,6 @@
 # =====================================================
-# FACT_VENDOR ONLY DICTIONARY - TIMEOUT FIX
-# Only references existing fact_vendor table
+# MULTI-FACT TABLE DICTIONARY - EXPANDED ARCHITECTURE  
+# Supports fact_vendor, fact_bids, and future fact tables
 # =====================================================
 
 fact_table_mapping = {
@@ -147,7 +147,127 @@ fact_table_mapping = {
     # =====================================================
     "team_members": {},
     "user_company_mappings": {},
-    "taggings": {}
+    "taggings": {},
+
+    # =====================================================
+    # BIDS TABLE → FACT_BIDS
+    # =====================================================
+    "bids": {
+        "id": {
+            "fact_bids": "id"
+        },
+        "user_id": {
+            "fact_bids": "user_id"
+        },
+        "status": {
+            "fact_bids": "status"
+        },
+        "delivery_type": {
+            "fact_bids": "delivery_type"
+        },
+        "company_id": {
+            "fact_bids": "company_id"
+        },
+        "product_sample_id": {
+            "fact_bids": "product_sample_id"
+        },
+        "city_id": {
+            "fact_bids": "city_id"
+        },
+        "broker_id": {
+            "fact_bids": "broker_id"
+        },
+        "broker_company_id": {
+            "fact_bids": "broker_company_id"
+        },
+        "applicable_apmc_product_config_id": {
+            "fact_bids": "applicable_apmc_product_config_id"
+        },
+        "contract_id": {
+            "fact_bids": "contract_id"
+        },
+        "session_id": {
+            "fact_bids": "session_id"
+        },
+        "approval_status": {
+            "fact_bids": "approval_status"
+        },
+        "lock_version": {
+            "fact_bids": "lock_version"
+        },
+        "created_at": {
+            "fact_bids": "created_at"
+        },
+        "updated_at": {
+            "fact_bids": "updated_at"
+        },
+        "end_time": {
+            "fact_bids": "end_time"
+        },
+        "start_time": {
+            "fact_bids": "start_time"
+        },
+        "closed_at": {
+            "fact_bids": "closed_at"
+        },
+        "placed_at": {
+            "fact_bids": "placed_at"
+        },
+        "negotiable": {
+            "fact_bids": "negotiable"
+        },
+        "is_multi_product": {
+            "fact_bids": "is_multi_product"
+        },
+        "price": {
+            "fact_bids": "price"
+        },
+        "quantity": {
+            "fact_bids": "quantity"
+        },
+        "gst": {
+            "fact_bids": "gst"
+        },
+        "rank_price": {
+            "fact_bids": "rank_price"
+        },
+        "final_price": {
+            "fact_bids": "final_price"
+        },
+        "amount": {
+            "fact_bids": "amount"
+        },
+        "score": {
+            "fact_bids": "score"
+        }
+    },
+
+    # =====================================================
+    # BID_TRADES TABLE → FACT_BID_TRADES
+    # =====================================================
+    "bid_trades": {
+        "id": {
+            "fact_bid_trades": "id"
+        },
+        "trade_request_id": {
+            "fact_bid_trades": "trade_request_id"
+        },
+        "bid_id": {
+            "fact_bid_trades": "bid_id"
+        },
+        "forwarded_by": {
+            "fact_bid_trades": "forwarded_by"
+        },
+        "status": {
+            "fact_bid_trades": "status"
+        },
+        "created_at": {
+            "fact_bid_trades": "created_at"
+        },
+        "updated_at": {
+            "fact_bid_trades": "updated_at"
+        }
+    }
 }
 
 # =====================================================

@@ -468,3 +468,117 @@ sources:
             description: "Creation timestamp"
           - name: updated_at
             description: "Last update timestamp"
+            
+      - name: bids
+        description: "Bid information from trading system"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: user_id
+            description: "User who placed the bid"
+          - name: trade_request_id
+            description: "Associated trade request ID"
+          - name: status
+            description: "Bid status"
+          - name: delivery_type
+            description: "Delivery type for the bid"
+          - name: company_id
+            description: "Company placing the bid"
+          - name: product_sample_id
+            description: "Product sample ID"
+          - name: city_id
+            description: "City ID for delivery"
+          - name: broker_id
+            description: "Broker user ID"
+          - name: broker_company_id
+            description: "Broker company ID"
+          - name: applicable_apmc_product_config_id
+            description: "APMC product configuration ID"
+          - name: contract_id
+            description: "Associated contract ID"
+          - name: session_id
+            description: "Trading session ID"
+          - name: approval_status
+            description: "Bid approval status"
+          - name: lock_version
+            description: "Version for optimistic locking"
+          - name: remarks
+            description: "Additional remarks for the bid"
+          - name: uuid
+            description: "Unique identifier"
+          - name: ip_info
+            description: "IP information of the bidder"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+          - name: end_time
+            description: "Bid end time"
+          - name: start_time
+            description: "Bid start time"
+          - name: closed_at
+            description: "Bid closure timestamp"
+          - name: placed_at
+            description: "Bid placement timestamp"
+          - name: negotiable
+            description: "Whether the bid is negotiable"
+          - name: is_multi_product
+            description: "Whether this is a multi-product bid"
+          - name: price
+            description: "Bid price"
+          - name: quantity
+            description: "Bid quantity"
+          - name: gst
+            description: "GST amount"
+          - name: rank_price
+            description: "Ranked price for comparison"
+          - name: final_price
+            description: "Final negotiated price"
+          - name: amount
+            description: "Total bid amount"
+          - name: score
+            description: "Bid score for ranking"
+          - name: quality_params
+            description: "Quality parameters (JSON)"
+          - name: terms_and_conditions
+            description: "Terms and conditions (JSON)"
+          - name: trade_credit_discount
+            description: "Trade credit discount details (JSON)"
+          - name: images
+            description: "Bid images (JSON array)"
+          - name: other_details
+            description: "Additional details (JSON)"
+          - name: bid_product_ids
+            description: "Product IDs in the bid (JSON array)"
+          - name: price_breakup_json
+            description: "Price breakdown (JSON)"
+          - name: template_data
+            description: "Template data (JSON)"
+          - name: meta_data
+            description: "Metadata (JSON)"
+          - name: context
+            description: "Bid context information (JSON)"
+            
+      - name: bid_trades
+        description: "Bid trading information and forwarding details"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: trade_request_id
+            description: "Associated trade request ID"
+          - name: bid_id
+            description: "Associated bid ID"
+          - name: forwarded_by
+            description: "User ID who forwarded the bid trade"
+          - name: status
+            description: "Bid trade status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
