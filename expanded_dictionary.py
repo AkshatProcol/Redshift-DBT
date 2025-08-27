@@ -143,6 +143,48 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # AUDIENCES TABLE → DIM_AUDIENCES
+    # =====================================================
+    "audiences": {
+        "id": {
+            "dim_audiences": "id"
+        },
+        "item_type": {
+            "dim_audiences": "item_type"
+        },
+        "item_id": {
+            "dim_audiences": "item_id"
+        },
+        "audience_id": {
+            "dim_audiences": "audience_id"
+        },
+        "status": {
+            "dim_audiences": "status"
+        },
+        "forwarded_by": {
+            "dim_audiences": "forwarded_by"
+        },
+        "created_at": {
+            "dim_audiences": "created_at"
+        },
+        "updated_at": {
+            "dim_audiences": "updated_at"
+        },
+        "visible": {
+            "dim_audiences": "visible"
+        },
+        "source": {
+            "dim_audiences": "source"
+        },
+        "audience_type": {
+            "dim_audiences": "audience_type"
+        },
+        "meta_data": {
+            "dim_audiences": "meta_data"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},
