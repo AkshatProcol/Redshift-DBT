@@ -1,0 +1,22 @@
+SELECT 
+    id,
+    title,
+    description_markdown,
+    status,
+    user_id,
+    company_id,
+    config,
+    attachments,
+    created_at,
+    updated_at,
+    terms_and_conditions,
+    precomputed_data,
+    ref_id,
+    started_at,
+    closed_at,
+    latest_stage_time,
+    lot_config,
+    closed_by_id,
+    precomputed_data_v1,
+    meta_data
+FROM {{ source('staging', 'event_groups') }}

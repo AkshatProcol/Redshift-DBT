@@ -19,7 +19,9 @@ class CDCOrchestrator:
             'companies', 'buyer_seller_company_mappings', 'users', 'teams',
             'team_members', 'cities', 'countries', 'product_categories',
             'user_company_mappings', 'taggings', 'tags', 'preferred_vendor_item_mappings',
-            'bids', 'bid_trades'
+            'bids', 'bid_trades', 'buyer_hubs', 'event_groups', 'bid_trade_products',
+            'audiences', 'orders', 'product_qualities', 'products', 'trade_products',
+            'trade_requests', 'units'
         ]
         
         # Initialize components

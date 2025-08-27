@@ -582,3 +582,75 @@ sources:
             description: "Creation timestamp"
           - name: updated_at
             description: "Last update timestamp"
+            
+      - name: trade_requests
+        description: "Trade requests and bidding events"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: user_id
+            description: "User who created the trade request"
+          - name: product_id
+            description: "Product being traded"
+          - name: company_id
+            description: "Company creating the trade request"
+          - name: status
+            description: "Trade request status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: products
+        description: "Product catalog and definitions"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Product name"
+          - name: company_id
+            description: "Company owning the product"
+          - name: status
+            description: "Product status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      - name: orders
+        description: "Purchase orders and transactions"
+        columns:
+          - name: id
+            description: "Primary key"
+            tests:
+              - not_null
+              - unique
+          - name: trade_request_id
+            description: "Associated trade request"
+          - name: bid_id
+            description: "Associated bid"
+          - name: buyer_company_id
+            description: "Buyer company"
+          - name: seller_company_id
+            description: "Seller company"
+          - name: status
+            description: "Order status"
+          - name: created_at
+            description: "Creation timestamp"
+          - name: updated_at
+            description: "Last update timestamp"
+            
+      # Additional staging tables for future fact tables
+      - name: buyer_hubs
+      - name: event_groups  
+      - name: bid_trade_products
+      - name: audiences
+      - name: product_qualities
+      - name: trade_products
+      - name: units
