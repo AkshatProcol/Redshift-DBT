@@ -396,6 +396,60 @@ fact_table_mapping = {
         "dms_upload_status": {
             "fact_orders": "dms_upload_status"
         }
+    },
+    
+    # =====================================================
+    # BID_TRADE_PRODUCTS TABLE MAPPINGS
+    # =====================================================
+    "bid_trade_products": {
+        "id": {
+            "fact_bid_trade_products": "id"
+        },
+        "trade_product_id": {
+            "fact_bid_trade_products": "trade_product_id"
+        },
+        "status": {
+            "fact_bid_trade_products": "status"
+        },
+        "price": {
+            "fact_bid_trade_products": "price"
+        },
+        "quantity": {
+            "fact_bid_trade_products": "quantity"
+        },
+        "product_sample_id": {
+            "fact_bid_trade_products": "product_sample_id"
+        },
+        "city_id": {
+            "fact_bid_trade_products": "city_id,city_name"
+        },
+        "applicable_apmc_product_config_id": {
+            "fact_bid_trade_products": "applicable_apmc_product_config_id"
+        },
+        "rank_price": {
+            "fact_bid_trade_products": "rank_price"
+        },
+        "final_price": {
+            "fact_bid_trade_products": "final_price"
+        },
+        "gst": {
+            "fact_bid_trade_products": "gst"
+        },
+        "ancestry": {
+            "fact_bid_trade_products": "ancestry"
+        },
+        "created_at": {
+            "fact_bid_trade_products": "created_at"
+        },
+        "updated_at": {
+            "fact_bid_trade_products": "updated_at"
+        },
+        "company_id": {
+            "fact_bid_trade_products": "company_id,company_name"
+        },
+        "score": {
+            "fact_bid_trade_products": "score"
+        }
     }
 }
 

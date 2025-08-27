@@ -12,14 +12,33 @@ class PublicSyncer:
         """Initialize public schema syncer"""
         self.db = db_connector
         
+        # Configuration for composite key handling
+        self.composite_key_config = {
+            'buyer_seller_company_mappings': {
+                'keys': ['client_company_id', 'dealing_with_company_id'],
+                'condition_template': 'client_company_id = %s AND dealing_with_company_id = %s'
+            },
+            'user_company_mappings': {
+                'keys': ['user_id', 'company_id'],
+                'condition_template': 'user_id = %s AND company_id = %s'
+            },
+            'taggings': {
+                'keys': ['tag_id', 'taggable_id', 'taggable_type'],
+                'condition_template': 'tag_id = %s AND taggable_id = %s AND taggable_type = %s'
+            },
+            'users': {
+                'keys': ['email'],
+                'condition_template': 'email = %s'
+            }
+        }
+        
+        # Configuration for tables that require explicit ID generation
+        self.id_required_tables = ['users']
+        
     def find_existing_record(self, table_name: str, record: Dict, cursor) -> Tuple[bool, str]:
         """
         🚀 SMART RECORD MATCHING: Handle both ID-based and composite key matching
-        
-        For tables with NULL IDs, use business-logical unique combinations:
-        - buyer_seller_company_mappings: client_company_id + dealing_with_company_id
-        - user_company_mappings: user_id + company_id  
-        - taggings: tag_id + taggable_id + taggable_type
+        Uses configuration-driven approach for scalability
         """
         record_id = record.get('id')
         
@@ -29,40 +48,27 @@ class PublicSyncer:
             exists = cursor.fetchone()[0] > 0
             return exists, f"id = {record_id}"
         
-        # Handle composite key scenarios for records with NULL IDs
-        if table_name == 'buyer_seller_company_mappings':
-            client_id = record.get('client_company_id')
-            vendor_id = record.get('dealing_with_company_id')
-            if client_id and vendor_id:
-                cursor.execute(f"""
-                    SELECT COUNT(*) FROM public.{table_name} 
-                    WHERE client_company_id = %s AND dealing_with_company_id = %s
-                """, (client_id, vendor_id))
-                exists = cursor.fetchone()[0] > 0
-                return exists, f"client_company_id = {client_id} AND dealing_with_company_id = {vendor_id}"
-        
-        elif table_name == 'user_company_mappings':
-            user_id = record.get('user_id')
-            company_id = record.get('company_id')
-            if user_id and company_id:
-                cursor.execute(f"""
-                    SELECT COUNT(*) FROM public.{table_name} 
-                    WHERE user_id = %s AND company_id = %s
-                """, (user_id, company_id))
-                exists = cursor.fetchone()[0] > 0
-                return exists, f"user_id = {user_id} AND company_id = {company_id}"
-        
-        elif table_name == 'taggings':
-            tag_id = record.get('tag_id')
-            taggable_id = record.get('taggable_id')
-            taggable_type = record.get('taggable_type')
-            if tag_id and taggable_id and taggable_type:
-                cursor.execute(f"""
-                    SELECT COUNT(*) FROM public.{table_name} 
-                    WHERE tag_id = %s AND taggable_id = %s AND taggable_type = %s
-                """, (tag_id, taggable_id, taggable_type))
-                exists = cursor.fetchone()[0] > 0
-                return exists, f"tag_id = {tag_id} AND taggable_id = {taggable_id} AND taggable_type = '{taggable_type}'"
+        # Handle composite key scenarios for records with NULL IDs using configuration
+        if table_name in self.composite_key_config:
+            config = self.composite_key_config[table_name]
+            keys = config['keys']
+            condition_template = config['condition_template']
+            
+            # Get values for all composite keys
+            key_values = [record.get(key) for key in keys]
+            
+            # Check if all required keys are present and not None
+            if all(value is not None for value in key_values):
+                try:
+                    cursor.execute(f"""
+                        SELECT COUNT(*) FROM public.{table_name} 
+                        WHERE {condition_template}
+                    """, key_values)
+                    exists = cursor.fetchone()[0] > 0
+                    return exists, condition_template
+                except Exception as e:
+                    print(f"      ⚠️ Composite key lookup failed for {table_name}: {e}")
+                    return False, condition_template
         
         # Default: assume it doesn't exist (will INSERT)
         return False, "1=0"
@@ -145,25 +151,72 @@ class PublicSyncer:
                             """
                             values = [record.get(col) for col in update_columns] + [record_id]
                         else:
-                            # Composite key-based update
-                            update_sql = f"""
-                            UPDATE public.{table_name} 
-                            SET {', '.join([f'{col} = %s' for col in update_columns])}
-                            WHERE {existing_record_condition}
-                            """
-                            values = [record.get(col) for col in update_columns]
+                            # Composite key-based update using configuration
+                            if table_name in self.composite_key_config:
+                                config = self.composite_key_config[table_name]
+                                condition_template = config['condition_template']
+                                key_values = [record.get(key) for key in config['keys']]
+                                
+                                update_sql = f"""
+                                UPDATE public.{table_name} 
+                                SET {', '.join([f'{col} = %s' for col in update_columns])}
+                                WHERE {condition_template}
+                                """
+                                values = [record.get(col) for col in update_columns] + key_values
+                            else:
+                                # Fallback for other composite key tables
+                                update_sql = f"""
+                                UPDATE public.{table_name} 
+                                SET {', '.join([f'{col} = %s' for col in update_columns])}
+                                WHERE {existing_record_condition}
+                                """
+                                values = [record.get(col) for col in update_columns]
                             
                         cursor.execute(update_sql, values)
                         operation = "updated"
                     else:
-                        # INSERT new record
-                        placeholders = ', '.join(['%s'] * len(column_names))
-                        columns_str = ', '.join(column_names)
+                        # INSERT new record (handle NULL ID properly)
+                        if record_id is not None:
+                            # Standard INSERT with ID
+                            placeholders = ', '.join(['%s'] * len(column_names))
+                            columns_str = ', '.join(column_names)
+                            values = [record.get(col) for col in column_names]
+                        else:
+                            # INSERT with NULL ID - need to generate new ID for tables that require it
+                            
+                            # Check if this record has enough data to be meaningful first
+                            temp_values = [record.get(col) for col in column_names if col != 'id']
+                            non_null_values = [v for v in temp_values if v is not None]
+                            if len(non_null_values) < 2:  # Skip records with too few meaningful values
+                                print(f"      ⚠️ Skipping record with insufficient data (only {len(non_null_values)} non-null values)")
+                                sync_failures += 1
+                                sync_details.append({
+                                    "record_id": record_id,
+                                    "operation": "skipped_insufficient_data",
+                                    "success": False
+                                })
+                                continue
+                            
+                            # For tables that require ID, generate next available ID
+                            if table_name in self.id_required_tables:
+                                cursor.execute(f"SELECT COALESCE(MAX(id), 0) + 1 FROM public.{table_name}")
+                                next_id = cursor.fetchone()[0]
+                                
+                                # Standard INSERT with generated ID
+                                placeholders = ', '.join(['%s'] * len(column_names))
+                                columns_str = ', '.join(column_names)
+                                values = [next_id if col == 'id' else record.get(col) for col in column_names]
+                            else:
+                                # INSERT without ID column (for tables that support it)
+                                insert_columns = [col for col in column_names if col != 'id']
+                                placeholders = ', '.join(['%s'] * len(insert_columns))
+                                columns_str = ', '.join(insert_columns)
+                                values = [record.get(col) for col in insert_columns]
+                        
                         insert_sql = f"""
                         INSERT INTO public.{table_name} ({columns_str})
                         VALUES ({placeholders})
                         """
-                        values = [record.get(col) for col in column_names]
                         cursor.execute(insert_sql, values)
                         operation = "inserted"
                     
@@ -176,13 +229,23 @@ class PublicSyncer:
                     
                 except Exception as e:
                     print(f"      ❌ Failed to sync record {record_id}: {e}")
+                    
+                    # Rollback failed transaction and start fresh for next record
+                    try:
+                        conn.rollback()
+                    except Exception:
+                        pass  # Connection might be closed
+                        
                     sync_failures += 1
                     sync_details.append({
                         "record_id": record_id,
-                        "operation": "failed",
+                        "operation": "failed", 
                         "error": str(e),
                         "success": False
                     })
+                    
+                    # Skip to next record without breaking the loop
+                    continue
             
             # Commit all changes
             conn.commit()
