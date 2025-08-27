@@ -450,6 +450,96 @@ fact_table_mapping = {
         "score": {
             "fact_bid_trade_products": "score"
         }
+    },
+    
+    # =====================================================
+    # TRADE_PRODUCTS TABLE MAPPINGS
+    # =====================================================
+    "trade_products": {
+        "id": {
+            "fact_trade_products": "id"
+        },
+        "trade_request_id": {
+            "fact_trade_products": "trade_request_id"
+        },
+        "product_id": {
+            "fact_trade_products": "product_id,product_name,product_type"
+        },
+        "product_quality_id": {
+            "fact_trade_products": "product_quality_id,product_quality_name"
+        },
+        "quantity": {
+            "fact_trade_products": "quantity"
+        },
+        "status": {
+            "fact_trade_products": "status"
+        },
+        "buyer_hub_id": {
+            "fact_trade_products": "buyer_hub_id,buyer_hub_name"
+        },
+        "product_origins": {
+            "fact_trade_products": "product_origins"
+        },
+        "remaining_quantity": {
+            "fact_trade_products": "remaining_quantity"
+        },
+        "auction_config": {
+            "fact_trade_products": "auction_config"
+        },
+        "unit_type": {
+            "fact_trade_products": "unit_type"
+        },
+        "current_status": {
+            "fact_trade_products": "current_status"
+        },
+        "created_at": {
+            "fact_trade_products": "created_at"
+        },
+        "updated_at": {
+            "fact_trade_products": "updated_at"
+        },
+        "price_ceiling": {
+            "fact_trade_products": "price_ceiling"
+        },
+        "price_floor": {
+            "fact_trade_products": "price_floor"
+        },
+        "price": {
+            "fact_trade_products": "price"
+        },
+        "gst": {
+            "fact_trade_products": "gst"
+        },
+        "floor_price": {
+            "fact_trade_products": "floor_price"
+        },
+        "ceil_price": {
+            "fact_trade_products": "ceil_price"
+        },
+        "floor_quantity": {
+            "fact_trade_products": "floor_quantity"
+        },
+        "sheet_order": {
+            "fact_trade_products": "sheet_order"
+        },
+        "created_by_user_id": {
+            "fact_trade_products": "created_by_user_id"
+        },
+        "unit_id": {
+            "fact_trade_products": "unit_id,unit_name,unit_symbol"
+        },
+        "section": {
+            "fact_trade_products": "section"
+        },
+        "order_no": {
+            "fact_trade_products": "order_no"
+        },
+        "rank_one_price": {
+            "fact_trade_products": "rank_one_price"
+        },
+        "rank_one_total_landed_amount": {
+            "fact_trade_products": "rank_one_total_landed_amount"
+        }
     }
 }
 
