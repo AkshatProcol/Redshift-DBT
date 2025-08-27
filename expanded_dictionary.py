@@ -192,11 +192,12 @@ fact_table_mapping = {
     "taggings": {},
 
     # =====================================================
-    # BIDS TABLE → FACT_BIDS
+    # BIDS TABLE → FACT_BIDS & DIM_BIDS
     # =====================================================
     "bids": {
         "id": {
-            "fact_bids": "id"
+            "fact_bids": "id",
+            "dim_bids": "id"
         },
         "user_id": {
             "fact_bids": "user_id"
@@ -281,6 +282,45 @@ fact_table_mapping = {
         },
         "score": {
             "fact_bids": "score"
+        },
+        "remarks": {
+            "dim_bids": "remarks"
+        },
+        "uuid": {
+            "dim_bids": "uuid"
+        },
+        "ip_info": {
+            "dim_bids": "ip_info"
+        },
+        "quality_params": {
+            "dim_bids": "quality_params"
+        },
+        "terms_and_conditions": {
+            "dim_bids": "terms_and_conditions"
+        },
+        "trade_credit_discount": {
+            "dim_bids": "trade_credit_discount"
+        },
+        "images": {
+            "dim_bids": "images"
+        },
+        "other_details": {
+            "dim_bids": "other_details"
+        },
+        "bid_product_ids": {
+            "dim_bids": "bid_product_ids"
+        },
+        "price_breakup_json": {
+            "dim_bids": "price_breakup_json"
+        },
+        "template_data": {
+            "dim_bids": "template_data"
+        },
+        "meta_data": {
+            "dim_bids": "meta_data"
+        },
+        "context": {
+            "dim_bids": "context"
         }
     },
 
