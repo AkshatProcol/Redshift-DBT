@@ -10,7 +10,9 @@
       'invited_by', 'invited_by_name', 'invited_by_email', 'poc_name', 'poc_email', 'poc_phone',
       'tag_names', 'preferred_item_ids', 'score_value', 'vendor_code', 'network_joined_date', 'source', 
       'is_verified', 'misc', 'archived_at', 'updated_at'
-    ]
+    ],
+    dist='vendor_id',
+    sort=['vendor_id', 'updated_at', 'client_company_id']
   )
 }}
 

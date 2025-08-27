@@ -7,7 +7,9 @@
     merge_update_columns=[
       'trade_request_id', 'bid_id', 'forwarded_by', 'status', 
       'created_at', 'updated_at'
-    ]
+    ],
+    dist='id',
+    sort=['id', 'created_at', 'trade_request_id']
   )
 }}
 

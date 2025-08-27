@@ -10,7 +10,9 @@
       'lock_version', 'created_at', 'updated_at', 'end_time', 'start_time', 'closed_at', 'placed_at', 
       'negotiable', 'is_multi_product', 'price', 'quantity', 'gst', 'rank_price', 'final_price', 'amount', 
       'score', 'user_first_name', 'user_last_name', 'company_name', 'city_name'
-    ]
+    ],
+    dist='id',
+    sort=['id', 'created_at', 'company_id', 'user_id']
   )
 }}
 

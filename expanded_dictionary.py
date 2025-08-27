@@ -267,6 +267,135 @@ fact_table_mapping = {
         "updated_at": {
             "fact_bid_trades": "updated_at"
         }
+    },
+
+    # =====================================================
+    # ORDERS TABLE → FACT_ORDERS
+    # =====================================================
+    "orders": {
+        "id": {
+            "fact_orders": "id"
+        },
+        "invoice_no": {
+            "fact_orders": "invoice_no"
+        },
+        "seller_company_id": {
+            "fact_orders": "seller_company_id,seller_company_name"
+        },
+        "trade_request_id": {
+            "fact_orders": "trade_request_id"
+        },
+        "product_name": {
+            "fact_orders": "product_name"
+        },
+        "po_email_sent": {
+            "fact_orders": "po_email_sent"
+        },
+        "price": {
+            "fact_orders": "price"
+        },
+        "quantity": {
+            "fact_orders": "quantity,fulfillment_percentage"
+        },
+        "quantity_received": {
+            "fact_orders": "quantity_received,fulfillment_percentage"
+        },
+        "payment_status": {
+            "fact_orders": "payment_status,payment_status_label"
+        },
+        "quality_feedback_status": {
+            "fact_orders": "quality_feedback_status"
+        },
+        "status": {
+            "fact_orders": "status,order_status_label"
+        },
+        "delivered_on": {
+            "fact_orders": "delivered_on,delivery_days"
+        },
+        "created_by_id": {
+            "fact_orders": "created_by_id"
+        },
+        "created_at": {
+            "fact_orders": "created_at,created_at_epoch"
+        },
+        "updated_at": {
+            "fact_orders": "updated_at,updated_at_epoch"
+        },
+        "buying_selling_offer_mapping_id": {
+            "fact_orders": "buying_selling_offer_mapping_id"
+        },
+        "bid_id": {
+            "fact_orders": "bid_id"
+        },
+        "purchase_order_status": {
+            "fact_orders": "purchase_order_status"
+        },
+        "buyer_company_id": {
+            "fact_orders": "buyer_company_id,buyer_company_name"
+        },
+        "buyer_hub_id": {
+            "fact_orders": "buyer_hub_id,buyer_hub_name"
+        },
+        "product_id": {
+            "fact_orders": "product_id,product_name_dim,product_type"
+        },
+        "delivery_schedule_id": {
+            "fact_orders": "delivery_schedule_id"
+        },
+        "final_price": {
+            "fact_orders": "final_price"
+        },
+        "product_quality_id": {
+            "fact_orders": "product_quality_id,product_quality_name"
+        },
+        "unit_type": {
+            "fact_orders": "unit_type"
+        },
+        "source_event_type": {
+            "fact_orders": "source_event_type"
+        },
+        "source_event_id": {
+            "fact_orders": "source_event_id"
+        },
+        "qc_pending": {
+            "fact_orders": "qc_pending"
+        },
+        "source_quote_type": {
+            "fact_orders": "source_quote_type"
+        },
+        "source_quote_id": {
+            "fact_orders": "source_quote_id"
+        },
+        "quality_approvals_accepted": {
+            "fact_orders": "quality_approvals_accepted"
+        },
+        "quality_approvals_rejected": {
+            "fact_orders": "quality_approvals_rejected"
+        },
+        "source_event_creator_id": {
+            "fact_orders": "source_event_creator_id"
+        },
+        "order_type": {
+            "fact_orders": "order_type"
+        },
+        "po_generated_at": {
+            "fact_orders": "po_generated_at,delivery_days"
+        },
+        "time_cycle": {
+            "fact_orders": "time_cycle"
+        },
+        "contract_status": {
+            "fact_orders": "contract_status"
+        },
+        "retry_count": {
+            "fact_orders": "retry_count"
+        },
+        "erp_order_type": {
+            "fact_orders": "erp_order_type"
+        },
+        "dms_upload_status": {
+            "fact_orders": "dms_upload_status"
+        }
     }
 }
 

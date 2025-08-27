@@ -66,12 +66,18 @@ class CDCOrchestrator:
         total_records = 0
         total_changes = 0
         total_comparisons = 0
+        tables_skipped = 0
         
         for table_name in self.staging_tables:
             analysis_result = self.change_detector.analyze_table_changes(table_name)
             
             if "error" in analysis_result:
                 print(f"⚠️  Skipping {table_name}: {analysis_result['error']}")
+                continue
+            
+            # Track skipped tables for performance reporting
+            if analysis_result.get("table_skipped"):
+                tables_skipped += 1
                 continue
             
             # Track results
@@ -96,6 +102,8 @@ class CDCOrchestrator:
             all_targeted_updates[fact_table] = list(all_targeted_updates[fact_table])
         
         print(f"\\n📊 Phase 1 Summary:")
+        print(f"   Tables processed: {len(self.staging_tables) - tables_skipped}/{len(self.staging_tables)}")
+        print(f"   Tables skipped: {tables_skipped} (empty - performance optimization)")
         print(f"   Records analyzed: {total_records}")
         print(f"   Column comparisons: {total_comparisons} (dictionary-optimized)")
         print(f"   Changes detected: {total_changes}")

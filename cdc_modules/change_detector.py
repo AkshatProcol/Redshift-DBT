@@ -129,8 +129,14 @@ class ChangeDetector:
         
         changed_records = self.db.get_changed_records(table_name)
         if not changed_records:
-            print(f"   ✅ No records found in staging.{table_name}")
-            return {"records_processed": 0, "changes_detected": 0}
+            print(f"   ✅ No records found in staging.{table_name} - SKIPPING (performance optimization)")
+            return {
+                "records_processed": 0, 
+                "changes_detected": 0,
+                "total_comparisons": 0,
+                "table_skipped": True,
+                "skip_reason": "empty_staging_table"
+            }
         
         # Analyze each record
         total_changes = 0
