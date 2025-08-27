@@ -540,6 +540,114 @@ fact_table_mapping = {
         "rank_one_total_landed_amount": {
             "fact_trade_products": "rank_one_total_landed_amount"
         }
+    },
+    
+    # =====================================================
+    # TRADE_REQUESTS TABLE MAPPINGS
+    # =====================================================
+    "trade_requests": {
+        "id": {
+            "fact_trade_requests": "id"
+        },
+        "user_id": {
+            "fact_trade_requests": "user_id,user_first_name,user_last_name"
+        },
+        "product_id": {
+            "fact_trade_requests": "product_id,product_name,product_type"
+        },
+        "buyer_hub_id": {
+            "fact_trade_requests": "buyer_hub_id,buyer_hub_name,buyer_hub_location"
+        },
+        "company_id": {
+            "fact_trade_requests": "company_id,company_name,company_category"
+        },
+        "city_id": {
+            "fact_trade_requests": "city_id,city_name"
+        },
+        "event_group_id": {
+            "fact_trade_requests": "event_group_id,event_group_title"
+        },
+        "quantity": {
+            "fact_trade_requests": "quantity"
+        },
+        "deal_closing_price": {
+            "fact_trade_requests": "deal_closing_price"
+        },
+        "deal_closing_quantity": {
+            "fact_trade_requests": "deal_closing_quantity"
+        },
+        "remaining_quantity": {
+            "fact_trade_requests": "remaining_quantity"
+        },
+        "number_of_products": {
+            "fact_trade_requests": "number_of_products"
+        },
+        "rank_one_gross_total": {
+            "fact_trade_requests": "rank_one_gross_total"
+        },
+        "bid_start_time": {
+            "fact_trade_requests": "bid_start_time"
+        },
+        "bid_end_time": {
+            "fact_trade_requests": "bid_end_time"
+        },
+        "created_at": {
+            "fact_trade_requests": "created_at"
+        },
+        "updated_at": {
+            "fact_trade_requests": "updated_at"
+        },
+        "closed_at": {
+            "fact_trade_requests": "closed_at"
+        },
+        "extra_closing_time": {
+            "fact_trade_requests": "extra_closing_time"
+        },
+        "order_type": {
+            "fact_trade_requests": "order_type"
+        },
+        "status": {
+            "fact_trade_requests": "status"
+        },
+        "unit_type": {
+            "fact_trade_requests": "unit_type"
+        },
+        "session_id": {
+            "fact_trade_requests": "session_id"
+        },
+        "rfx_mode": {
+            "fact_trade_requests": "rfx_mode"
+        },
+        "current_status": {
+            "fact_trade_requests": "current_status"
+        },
+        "stage_no": {
+            "fact_trade_requests": "stage_no"
+        },
+        "approval_status": {
+            "fact_trade_requests": "approval_status"
+        },
+        "tender": {
+            "fact_trade_requests": "tender"
+        },
+        "is_price_increase_approval_required": {
+            "fact_trade_requests": "is_price_increase_approval_required"
+        },
+        "is_demo_event": {
+            "fact_trade_requests": "is_demo_event"
+        },
+        "broker_company_id": {
+            "fact_trade_requests": "broker_company_id"
+        },
+        "provisional_contracts_id": {
+            "fact_trade_requests": "provisional_contracts_id"
+        },
+        "template_id": {
+            "fact_trade_requests": "template_id"
+        },
+        "purchase_request_id": {
+            "fact_trade_requests": "purchase_request_id"
+        }
     }
 }
 

@@ -73,9 +73,9 @@ WITH trade_products_enriched AS (
          ON tp.unit_id = u.id
   
   {% if is_incremental() %}
-    -- Incremental filter: only process records updated in the last 30 minutes
-    WHERE tp.updated_at >= (SELECT MAX(updated_at) FROM {{ this }}) - INTERVAL '30 minutes'
-       OR tp.created_at >= (SELECT MAX(updated_at) FROM {{ this }}) - INTERVAL '30 minutes'
+    -- Smart incremental filter: handles empty tables gracefully
+    WHERE tp.updated_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes'
+       OR tp.created_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes'
   {% endif %}
 )
 

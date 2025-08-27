@@ -146,7 +146,7 @@ class PublicSyncer:
                             # Standard ID-based update
                             update_sql = f"""
                             UPDATE public.{table_name} 
-                            SET {', '.join([f'{col} = %s' for col in update_columns])}
+                            SET {', '.join([f'"{col}" = %s' for col in update_columns])}
                             WHERE id = %s
                             """
                             values = [record.get(col) for col in update_columns] + [record_id]
@@ -159,7 +159,7 @@ class PublicSyncer:
                                 
                                 update_sql = f"""
                                 UPDATE public.{table_name} 
-                                SET {', '.join([f'{col} = %s' for col in update_columns])}
+                                SET {', '.join([f'"{col}" = %s' for col in update_columns])}
                                 WHERE {condition_template}
                                 """
                                 values = [record.get(col) for col in update_columns] + key_values
@@ -167,7 +167,7 @@ class PublicSyncer:
                                 # Fallback for other composite key tables
                                 update_sql = f"""
                                 UPDATE public.{table_name} 
-                                SET {', '.join([f'{col} = %s' for col in update_columns])}
+                                SET {', '.join([f'"{col}" = %s' for col in update_columns])}
                                 WHERE {existing_record_condition}
                                 """
                                 values = [record.get(col) for col in update_columns]
@@ -179,7 +179,7 @@ class PublicSyncer:
                         if record_id is not None:
                             # Standard INSERT with ID
                             placeholders = ', '.join(['%s'] * len(column_names))
-                            columns_str = ', '.join(column_names)
+                            columns_str = ', '.join([f'"{col}"' for col in column_names])
                             values = [record.get(col) for col in column_names]
                         else:
                             # INSERT with NULL ID - need to generate new ID for tables that require it
@@ -204,13 +204,13 @@ class PublicSyncer:
                                 
                                 # Standard INSERT with generated ID
                                 placeholders = ', '.join(['%s'] * len(column_names))
-                                columns_str = ', '.join(column_names)
+                                columns_str = ', '.join([f'"{col}"' for col in column_names])
                                 values = [next_id if col == 'id' else record.get(col) for col in column_names]
                             else:
                                 # INSERT without ID column (for tables that support it)
                                 insert_columns = [col for col in column_names if col != 'id']
                                 placeholders = ', '.join(['%s'] * len(insert_columns))
-                                columns_str = ', '.join(insert_columns)
+                                columns_str = ', '.join([f'"{col}"' for col in insert_columns])
                                 values = [record.get(col) for col in insert_columns]
                         
                         insert_sql = f"""

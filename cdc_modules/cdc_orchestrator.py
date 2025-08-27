@@ -27,7 +27,7 @@ class CDCOrchestrator:
         # Initialize components
         self.db = DatabaseConnector(db_config)
         self.change_detector = ChangeDetector(self.db, dictionary_mapping)
-        self.fact_updater = FactUpdater()
+        self.fact_updater = FactUpdater(self.db)
         self.public_syncer = PublicSyncer(self.db)
         
         print("🔄 CDC Orchestrator - Surgical Precision + Public Schema Sync")

@@ -8,28 +8,57 @@ from typing import Dict, List
 
 
 class FactUpdater:
-    def __init__(self):
+    def __init__(self, database_connector=None):
         """Initialize fact table updater"""
         self.updated_tables = []
         self.failed_tables = []
+        self.db = database_connector
         
-    def execute_fact_table_update(self, fact_table: str) -> bool:
-        """Execute fact table update using dbt"""
-        try:
-            print(f"   🔄 Running dbt for {fact_table}...")
-            cmd = f"dbt run --select {fact_table} --target dev"
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=300)
+    def is_fact_table_empty(self, fact_table: str) -> bool:
+        """Check if a fact table is empty or doesn't exist"""
+        if not self.db:
+            return False
             
-            if result.returncode == 0:
-                print(f"   ✅ Successfully updated {fact_table}")
-                self.updated_tables.append(fact_table)
-                return True
+        try:
+            conn = self.db.get_connection()
+            cursor = conn.cursor()
+            
+            # Check if table exists and count records
+            cursor.execute(f"SELECT COUNT(*) FROM staging_public.{fact_table}")
+            count = cursor.fetchone()[0]
+            conn.close()
+            
+            return count == 0
+            
+        except Exception as e:
+            print(f"   ℹ️  Could not check {fact_table} (likely new table): {e}")
+            return True  # Assume it's new/empty if we can't check
+    
+    def execute_fact_table_update(self, fact_table: str) -> bool:
+        """Execute fact table update using dbt with auto-refresh for empty tables"""
+        try:
+            # Check if table is empty/new and needs full refresh
+            is_empty = self.is_fact_table_empty(fact_table)
+            
+            if is_empty:
+                print(f"   🆕 {fact_table} is empty/new - using full refresh for initial data load")
+                return self.run_full_refresh(fact_table)
             else:
-                print(f"   ❌ Failed to update {fact_table}")
-                print(f"   📝 Error: {result.stderr}")
-                self.failed_tables.append(fact_table)
-                return False
+                print(f"   🔄 Running incremental update for {fact_table}...")
+                cmd = f"dbt run --select {fact_table} --target dev"
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=300)
                 
+                if result.returncode == 0:
+                    print(f"   ✅ Successfully updated {fact_table}")
+                    self.updated_tables.append(fact_table)
+                    return True
+                else:
+                    print(f"   ❌ Incremental update failed for {fact_table}")
+                    print(f"   📝 Error: {result.stderr}")
+                    print(f"   🔄 Attempting full refresh as fallback...")
+                    # Try full refresh as fallback
+                    return self.run_full_refresh(fact_table)
+                    
         except subprocess.TimeoutExpired:
             print(f"   ⏰ Timeout updating {fact_table} (5 minutes)")
             self.failed_tables.append(fact_table)
@@ -88,17 +117,21 @@ class FactUpdater:
             
             if result.returncode == 0:
                 print(f"   ✅ Successfully refreshed {fact_table}")
+                self.updated_tables.append(fact_table)
                 return True
             else:
                 print(f"   ❌ Failed to refresh {fact_table}")
                 print(f"   📝 Error: {result.stderr}")
+                self.failed_tables.append(fact_table)
                 return False
                 
         except subprocess.TimeoutExpired:
             print(f"   ⏰ Timeout refreshing {fact_table} (10 minutes)")
+            self.failed_tables.append(fact_table)
             return False
         except Exception as e:
             print(f"   ❌ Exception refreshing {fact_table}: {e}")
+            self.failed_tables.append(fact_table)
             return False
     
     def test_fact_tables(self, fact_tables: List[str] = None) -> Dict:

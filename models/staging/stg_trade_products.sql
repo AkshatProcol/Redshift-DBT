@@ -36,7 +36,7 @@ SELECT
     event_score_for_participants,
     unit_id,
     section,
-    order_no,
+    "order" as order_no,
     event_score_for_buyers,
     rank_one_price,
     rank_one_total_landed_amount,
