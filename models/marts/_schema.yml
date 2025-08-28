@@ -730,3 +730,63 @@ models:
         description: "Scoring data specific to buyers (JSON/SUPER)"
       - name: auction_analytics_json
         description: "Auction analytics and performance metrics (JSON/SUPER)"
+
+  - name: dim_units
+    description: "Units dimension table for measurement units and conversions"
+    columns:
+      - name: id
+        description: "Primary key - Unit ID"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Unit name (e.g., 'kilogram', 'ton', 'quintal')"
+        tests:
+          - not_null
+      - name: symbol
+        description: "Unit symbol (e.g., 'kg', 't', 'qtl')"
+        tests:
+          - not_null
+      - name: conversion_factor
+        description: "Conversion factor to base unit for calculations"
+      - name: status
+        description: "Unit status (0=inactive, 1=active, etc.)"
+      - name: base_unit_id
+        description: "Reference to the base unit for conversion hierarchy"
+      - name: company_id
+        description: "Company that created/owns this unit (for custom units)"
+      - name: user_id
+        description: "User who created this unit definition"
+      - name: created_at
+        description: "Unit creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+
+  - name: dim_user_company_mappings
+    description: "User-to-company relationship mappings with trade identifiers and designations"
+    columns:
+      - name: id
+        description: "Primary key - User company mapping ID"
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: "User ID in the relationship"
+        tests:
+          - not_null
+      - name: company_id
+        description: "Company ID in the relationship"
+        tests:
+          - not_null
+      - name: status
+        description: "Mapping status (0=inactive, 1=active, etc.)"
+      - name: designation_id
+        description: "User's designation/role ID within the company"
+      - name: erp_id
+        description: "External ERP system identifier for integration"
+      - name: created_at
+        description: "Relationship creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: trade_identifier
+        description: "Trade-specific identifiers and metadata for this user-company relationship (SUPER/JSON)"

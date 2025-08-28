@@ -656,10 +656,78 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # UNITS TABLE → DIM_UNITS
+    # =====================================================
+    "units": {
+        "id": {
+            "dim_units": "id"
+        },
+        "name": {
+            "dim_units": "name"
+        },
+        "symbol": {
+            "dim_units": "symbol"
+        },
+        "conversion_factor": {
+            "dim_units": "conversion_factor"
+        },
+        "status": {
+            "dim_units": "status"
+        },
+        "base_unit_id": {
+            "dim_units": "base_unit_id"
+        },
+        "company_id": {
+            "dim_units": "company_id"
+        },
+        "user_id": {
+            "dim_units": "user_id"
+        },
+        "created_at": {
+            "dim_units": "created_at"
+        },
+        "updated_at": {
+            "dim_units": "updated_at"
+        }
+    },
+
+    # =====================================================
+    # USER_COMPANY_MAPPINGS TABLE → DIM_USER_COMPANY_MAPPINGS
+    # =====================================================
+    "user_company_mappings": {
+        "id": {
+            "dim_user_company_mappings": "id"
+        },
+        "user_id": {
+            "dim_user_company_mappings": "user_id"
+        },
+        "company_id": {
+            "dim_user_company_mappings": "company_id"
+        },
+        "status": {
+            "dim_user_company_mappings": "status"
+        },
+        "designation_id": {
+            "dim_user_company_mappings": "designation_id"
+        },
+        "erp_id": {
+            "dim_user_company_mappings": "erp_id"
+        },
+        "created_at": {
+            "dim_user_company_mappings": "created_at"
+        },
+        "updated_at": {
+            "dim_user_company_mappings": "updated_at"
+        },
+        "trade_identifier": {
+            "dim_user_company_mappings": "trade_identifier"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},
-    "user_company_mappings": {},
     "taggings": {},
 
     # =====================================================
