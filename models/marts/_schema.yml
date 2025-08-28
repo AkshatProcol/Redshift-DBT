@@ -642,3 +642,40 @@ models:
         description: "User who created this quality specification"
       - name: attachments
         description: "Quality specification attachments and documents (JSON/SUPER)"
+
+  - name: dim_trade_products
+    description: "Trade product descriptive dimension table with complex trading configurations and analytics"
+    columns:
+      - name: id
+        description: "Primary key - Trade product ID (references fact_trade_products)"
+        tests:
+          - not_null
+          - unique
+      - name: product_options
+        description: "Product options and variants for trading (JSON/SUPER)"
+      - name: other_details
+        description: "Additional trade product details and notes (JSON/SUPER)"
+      - name: config
+        description: "Trade product configuration settings (JSON/SUPER)"
+      - name: validations
+        description: "Validation rules and constraints for trading (JSON/SUPER)"
+      - name: projected_price_range
+        description: "Projected price ranges and estimates (JSON/SUPER)"
+      - name: meta_data
+        description: "Trade product metadata and system information (JSON/SUPER)"
+      - name: product_options_identifier
+        description: "Product option identifiers and mappings (JSON/SUPER)"
+      - name: template_data
+        description: "Template data for trade product display (JSON/SUPER)"
+      - name: rank_hash
+        description: "Ranking hash values for auction ordering (JSON/SUPER)"
+      - name: variant_details
+        description: "Product variant specifications and details (JSON/SUPER)"
+      - name: trade_identifiers
+        description: "Trade-specific identifiers and codes (JSON/SUPER)"
+      - name: event_score_for_participants
+        description: "Scoring data for trading event participants (JSON/SUPER)"
+      - name: event_score_for_buyers
+        description: "Scoring data specific to buyers in trading events (JSON/SUPER)"
+      - name: auction_analytics_json
+        description: "Auction analytics and performance metrics (JSON/SUPER)"

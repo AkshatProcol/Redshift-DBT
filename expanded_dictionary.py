@@ -1066,7 +1066,8 @@ fact_table_mapping = {
     # =====================================================
     "trade_products": {
         "id": {
-            "fact_trade_products": "id"
+            "fact_trade_products": "id",
+            "dim_trade_products": "id"
         },
         "trade_request_id": {
             "fact_trade_products": "trade_request_id"
@@ -1148,6 +1149,49 @@ fact_table_mapping = {
         },
         "rank_one_total_landed_amount": {
             "fact_trade_products": "rank_one_total_landed_amount"
+        },
+        # Additional columns for dim_trade_products (descriptive attributes)
+        "product_options": {
+            "dim_trade_products": "product_options"
+        },
+        "other_details": {
+            "dim_trade_products": "other_details"
+        },
+        "config": {
+            "dim_trade_products": "config"
+        },
+        "validations": {
+            "dim_trade_products": "validations"
+        },
+        "projected_price_range": {
+            "dim_trade_products": "projected_price_range"
+        },
+        "meta_data": {
+            "dim_trade_products": "meta_data"
+        },
+        "product_options_identifier": {
+            "dim_trade_products": "product_options_identifier"
+        },
+        "template_data": {
+            "dim_trade_products": "template_data"
+        },
+        "rank_hash": {
+            "dim_trade_products": "rank_hash"
+        },
+        "variant_details": {
+            "dim_trade_products": "variant_details"
+        },
+        "trade_identifiers": {
+            "dim_trade_products": "trade_identifiers"
+        },
+        "event_score_for_participants": {
+            "dim_trade_products": "event_score_for_participants"
+        },
+        "event_score_for_buyers": {
+            "dim_trade_products": "event_score_for_buyers"
+        },
+        "auction_analytics_json": {
+            "dim_trade_products": "auction_analytics_json"
         }
     },
     
