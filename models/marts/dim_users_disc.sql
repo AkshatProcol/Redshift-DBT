@@ -41,11 +41,12 @@ WITH users_disc_base AS (
     deleted_at
     
   FROM {{ ref('stg_users') }}
+  WHERE id IS NOT NULL  -- Filter out NULL id values
   
   {% if is_incremental() %}
     -- Smart incremental filter: handles empty tables gracefully
-    WHERE updated_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes'
-       OR created_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes'
+    AND (updated_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes'
+       OR created_at >= COALESCE((SELECT MAX(updated_at) FROM {{ this }}), '1900-01-01'::timestamp) - INTERVAL '30 minutes')
   {% endif %}
 )
 

@@ -7,7 +7,8 @@
     merge_update_columns=[
       'remarks', 'uuid', 'ip_info', 'quality_params', 'terms_and_conditions',
       'trade_credit_discount', 'images', 'other_details', 'bid_product_ids',
-      'price_breakup_json', 'template_data', 'meta_data', 'context'
+      'price_breakup_json', 'template_data', 'meta_data', 'context',
+      'created_at', 'updated_at'
     ],
     dist='id',
     sort=['id']
@@ -34,7 +35,9 @@ WITH bids_details_base AS (
     price_breakup_json,
     template_data,
     meta_data,
-    context
+    context,
+    created_at,
+    updated_at
     
   FROM {{ ref('stg_bids') }}
   
@@ -59,5 +62,7 @@ SELECT
   price_breakup_json,
   template_data,
   meta_data,
-  context
+  context,
+  created_at,
+  updated_at
 FROM bids_details_base
