@@ -293,3 +293,121 @@ models:
         description: "City record creation timestamp"
       - name: updated_at
         description: "Last update timestamp for incremental processing"
+
+  - name: dim_companies
+    description: "Company dimension table with comprehensive business data"
+    columns:
+      - name: id
+        description: "Primary key - Company ID"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Company name"
+        tests:
+          - not_null
+      - name: image_url
+        description: "Company logo/image URL"
+      - name: address
+        description: "Company physical address"
+      - name: coordinates
+        description: "Geographic coordinates of company location"
+      - name: phone
+        description: "Company primary phone number"
+      - name: email
+        description: "Company primary email address"
+      - name: email_extension
+        description: "Company email domain extension"
+      - name: pan_no
+        description: "PAN (Permanent Account Number) for tax purposes"
+      - name: fssai_code
+        description: "FSSAI (Food Safety Standards Authority) registration code"
+      - name: gst_no
+        description: "GST (Goods and Services Tax) registration number"
+      - name: owner_name
+        description: "Name of the company owner/proprietor"
+      - name: year_of_establishment
+        description: "Year when the company was established"
+      - name: tan_number
+        description: "TAN (Tax Deduction Account Number)"
+      - name: number_of_employees
+        description: "Total number of employees in the company"
+      - name: domain
+        description: "Company business domain/industry"
+      - name: website
+        description: "Company official website URL"
+      - name: broker_for
+        description: "Brokerage information and relationships (JSON/SUPER)"
+      - name: document_images
+        description: "Company registration and verification documents (JSON/SUPER)"
+      - name: update_remarks
+        description: "Administrative notes and update remarks (JSON/SUPER)"
+      - name: allowed_modules
+        description: "System modules and permissions assigned (JSON/SUPER)"
+      - name: misc
+        description: "Miscellaneous company metadata including scores (JSON/SUPER)"
+      - name: recommendation_identifier
+        description: "Company recommendation and referral data (JSON/SUPER)"
+      - name: created_at
+        description: "Company record creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+
+  - name: dim_companies_disc
+    description: "Company dimension table with comprehensive business data (descriptive attributes copy)"
+    columns:
+      - name: id
+        description: "Primary key - Company ID (references dim_companies)"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Company name"
+        tests:
+          - not_null
+      - name: image_url
+        description: "Company logo/image URL"
+      - name: address
+        description: "Company physical address"
+      - name: coordinates
+        description: "Geographic coordinates of company location"
+      - name: phone
+        description: "Company primary phone number"
+      - name: email
+        description: "Company primary email address"
+      - name: email_extension
+        description: "Company email domain extension"
+      - name: pan_no
+        description: "PAN (Permanent Account Number) for tax purposes"
+      - name: fssai_code
+        description: "FSSAI (Food Safety Standards Authority) registration code"
+      - name: gst_no
+        description: "GST (Goods and Services Tax) registration number"
+      - name: owner_name
+        description: "Name of the company owner/proprietor"
+      - name: year_of_establishment
+        description: "Year when the company was established"
+      - name: tan_number
+        description: "TAN (Tax Deduction Account Number)"
+      - name: number_of_employees
+        description: "Total number of employees in the company"
+      - name: domain
+        description: "Company business domain/industry"
+      - name: website
+        description: "Company official website URL"
+      - name: broker_for
+        description: "Brokerage information and relationships (JSON/SUPER)"
+      - name: document_images
+        description: "Company registration and verification documents (JSON/SUPER)"
+      - name: update_remarks
+        description: "Administrative notes and update remarks (JSON/SUPER)"
+      - name: allowed_modules
+        description: "System modules and permissions assigned (JSON/SUPER)"
+      - name: misc
+        description: "Miscellaneous company metadata including scores (JSON/SUPER)"
+      - name: recommendation_identifier
+        description: "Company recommendation and referral data (JSON/SUPER)"
+      - name: created_at
+        description: "Company record creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"

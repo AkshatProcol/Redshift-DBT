@@ -9,22 +9,34 @@ fact_table_mapping = {
     # =====================================================
     "companies": {
         "id": {
-            "fact_vendor": "vendor_id"
+            "fact_vendor": "vendor_id",
+            "dim_companies": "id",
+            "dim_companies_disc": "id"
         },
         "name": {
-            "fact_vendor": "vendor_name"
+            "fact_vendor": "vendor_name",
+            "dim_companies": "name",
+            "dim_companies_disc": "name"
         },
         "email": {
-            "fact_vendor": "vendor_email"
+            "fact_vendor": "vendor_email",
+            "dim_companies": "email",
+            "dim_companies_disc": "email"
         },
         "phone": {
-            "fact_vendor": "primary_contact_phone"
+            "fact_vendor": "primary_contact_phone",
+            "dim_companies": "phone",
+            "dim_companies_disc": "phone"
         },
         "gst_no": {
-            "fact_vendor": "gst_no"
+            "fact_vendor": "gst_no",
+            "dim_companies": "gst_no",
+            "dim_companies_disc": "gst_no"
         },
         "address": {
-            "fact_vendor": "address"
+            "fact_vendor": "address",
+            "dim_companies": "address",
+            "dim_companies_disc": "address"
         },
         "category": {
             "fact_vendor": "vendor_type"
@@ -33,7 +45,133 @@ fact_table_mapping = {
             "fact_vendor": "is_verified"
         },
         "misc": {
-            "fact_vendor": "misc,score_value"
+            "fact_vendor": "misc,score_value",
+            "dim_companies": "misc",
+            "dim_companies_disc": "misc"
+        },
+        "image_url": {
+            "dim_companies": "image_url"
+        },
+        "coordinates": {
+            "dim_companies": "coordinates"
+        },
+        "email_extension": {
+            "dim_companies": "email_extension"
+        },
+        "pan_no": {
+            "dim_companies": "pan_no"
+        },
+        "fssai_code": {
+            "dim_companies": "fssai_code"
+        },
+        "owner_name": {
+            "dim_companies": "owner_name"
+        },
+        "year_of_establishment": {
+            "dim_companies": "year_of_establishment"
+        },
+        "tan_number": {
+            "dim_companies": "tan_number"
+        },
+        "number_of_employees": {
+            "dim_companies": "number_of_employees"
+        },
+        "domain": {
+            "dim_companies": "domain"
+        },
+        "website": {
+            "dim_companies": "website"
+        },
+        "broker_for": {
+            "dim_companies": "broker_for"
+        },
+        "document_images": {
+            "dim_companies": "document_images"
+        },
+        "update_remarks": {
+            "dim_companies": "update_remarks"
+        },
+        "allowed_modules": {
+            "dim_companies": "allowed_modules"
+        },
+        "recommendation_identifier": {
+            "dim_companies": "recommendation_identifier"
+        },
+        "created_at": {
+            "dim_companies": "created_at"
+        },
+        "updated_at": {
+            "dim_companies": "updated_at",
+            "dim_companies_disc": "updated_at"
+        },
+        # Additional columns for dim_companies_disc (same as dim_companies)
+        "image_url": {
+            "dim_companies": "image_url",
+            "dim_companies_disc": "image_url"
+        },
+        "coordinates": {
+            "dim_companies": "coordinates",
+            "dim_companies_disc": "coordinates"
+        },
+        "email_extension": {
+            "dim_companies": "email_extension",
+            "dim_companies_disc": "email_extension"
+        },
+        "pan_no": {
+            "dim_companies": "pan_no",
+            "dim_companies_disc": "pan_no"
+        },
+        "fssai_code": {
+            "dim_companies": "fssai_code",
+            "dim_companies_disc": "fssai_code"
+        },
+        "owner_name": {
+            "dim_companies": "owner_name",
+            "dim_companies_disc": "owner_name"
+        },
+        "year_of_establishment": {
+            "dim_companies": "year_of_establishment",
+            "dim_companies_disc": "year_of_establishment"
+        },
+        "tan_number": {
+            "dim_companies": "tan_number",
+            "dim_companies_disc": "tan_number"
+        },
+        "number_of_employees": {
+            "dim_companies": "number_of_employees",
+            "dim_companies_disc": "number_of_employees"
+        },
+        "domain": {
+            "dim_companies": "domain",
+            "dim_companies_disc": "domain"
+        },
+        "website": {
+            "dim_companies": "website",
+            "dim_companies_disc": "website"
+        },
+        "broker_for": {
+            "dim_companies": "broker_for",
+            "dim_companies_disc": "broker_for"
+        },
+        "document_images": {
+            "dim_companies": "document_images",
+            "dim_companies_disc": "document_images"
+        },
+        "update_remarks": {
+            "dim_companies": "update_remarks",
+            "dim_companies_disc": "update_remarks"
+        },
+        "allowed_modules": {
+            "dim_companies": "allowed_modules",
+            "dim_companies_disc": "allowed_modules"
+        },
+        "recommendation_identifier": {
+            "dim_companies": "recommendation_identifier",
+            "dim_companies_disc": "recommendation_identifier"
+        },
+        "created_at": {
+            "dim_companies": "created_at",
+            "dim_companies_disc": "created_at"
         }
     },
 
