@@ -185,6 +185,58 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # BUYER_HUBS TABLE → DIM_BUYER_HUBS (New Dimension)
+    # =====================================================
+    "buyer_hubs": {
+        "id": {
+            "dim_buyer_hubs": "id,buyer_hub_id",
+            "dim_buyer_hubs_disc": "buyer_hub_id"
+        },
+        "name": {
+            "dim_buyer_hubs": "name"
+        },
+        "city_id": {
+            "dim_buyer_hubs": "city_id"
+        },
+        "company_id": {
+            "dim_buyer_hubs": "company_id,company_name"
+        },
+        "status": {
+            "dim_buyer_hubs_disc": "status"
+        },
+        "coordinates": {
+            "dim_buyer_hubs_disc": "coordinates"
+        },
+        "location_code": {
+            "dim_buyer_hubs_disc": "location_code"
+        },
+        "location_type": {
+            "dim_buyer_hubs_disc": "location_type"
+        },
+        "address": {
+            "dim_buyer_hubs_disc": "address"
+        },
+        "zone_id": {
+            "dim_buyer_hubs_disc": "zone_id"
+        },
+        "misc": {
+            "dim_buyer_hubs_disc": "misc"
+        },
+        "created_by": {
+            "dim_buyer_hubs_disc": "created_by"
+        },
+        "user_id": {
+            "dim_buyer_hubs_disc": "user_id"
+        },
+        "created_at": {
+            "dim_buyer_hubs": "created_at"
+        },
+        "updated_at": {
+            "dim_buyer_hubs": "updated_at"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},

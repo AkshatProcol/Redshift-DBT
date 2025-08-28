@@ -171,3 +171,57 @@ models:
         description: "Creation timestamp"
       - name: updated_at
         description: "Last update timestamp for incremental processing"
+        
+  - name: dim_buyer_hubs
+    description: "Buyer hub dimension table with company enrichment"
+    columns:
+      - name: id
+        description: "Primary key - Buyer hub ID"
+        tests:
+          - not_null
+          - unique
+      - name: buyer_hub_id
+        description: "Buyer hub identifier (same as id)"
+        tests:
+          - not_null
+      - name: name
+        description: "Buyer hub name"
+      - name: city_id
+        description: "City ID where hub is located"
+      - name: company_id
+        description: "Company that owns this buyer hub"
+        tests:
+          - not_null
+      - name: company_name
+        description: "Company name (enriched from companies table)"
+      - name: created_at
+        description: "Hub creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+        
+  - name: dim_buyer_hubs_disc
+    description: "Buyer hub detailed attributes and descriptive information"
+    columns:
+      - name: buyer_hub_id
+        description: "Buyer hub ID (unique key, references dim_buyer_hubs)"
+        tests:
+          - not_null
+          - unique
+      - name: status
+        description: "Hub status code (1=active, 0=inactive, 2=other)"
+      - name: coordinates
+        description: "Geographic coordinates of the hub"
+      - name: location_code
+        description: "Hub location code identifier"
+      - name: location_type
+        description: "Location type code (1=warehouse, 2=office, 3=distribution_center, 0=other)"
+      - name: address
+        description: "Physical address of the hub"
+      - name: zone_id
+        description: "Zone ID for regional grouping"
+      - name: misc
+        description: "Additional hub metadata and miscellaneous information"
+      - name: created_by
+        description: "User ID who created this hub"
+      - name: user_id
+        description: "Primary user associated with this hub"
