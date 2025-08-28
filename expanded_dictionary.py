@@ -1200,7 +1200,8 @@ fact_table_mapping = {
     # =====================================================
     "trade_requests": {
         "id": {
-            "fact_trade_requests": "id"
+            "fact_trade_requests": "id",
+            "dim_trade_requests_disc": "id"
         },
         "user_id": {
             "fact_trade_requests": "user_id,user_first_name,user_last_name"
@@ -1300,6 +1301,70 @@ fact_table_mapping = {
         },
         "purchase_request_id": {
             "fact_trade_requests": "purchase_request_id"
+        },
+        # Additional columns for dim_trade_requests_disc (descriptive attributes)
+        "description": {
+            "dim_trade_requests_disc": "description"
+        },
+        "company_trade_id": {
+            "dim_trade_requests_disc": "company_trade_id"
+        },
+        "ref_id": {
+            "dim_trade_requests_disc": "ref_id"
+        },
+        "ip_info": {
+            "dim_trade_requests_disc": "ip_info"
+        },
+        "terms_and_conditions": {
+            "dim_trade_requests_disc": "terms_and_conditions"
+        },
+        "misc": {
+            "dim_trade_requests_disc": "misc"
+        },
+        "product_origins": {
+            "dim_trade_requests_disc": "product_origins"
+        },
+        "auction_config": {
+            "dim_trade_requests_disc": "auction_config"
+        },
+        "config": {
+            "dim_trade_requests_disc": "config"
+        },
+        "customised_audience": {
+            "dim_trade_requests_disc": "customised_audience"
+        },
+        "auction_rank_hash": {
+            "dim_trade_requests_disc": "auction_rank_hash"
+        },
+        "team_identifier": {
+            "dim_trade_requests_disc": "team_identifier"
+        },
+        "widgets": {
+            "dim_trade_requests_disc": "widgets"
+        },
+        "meta_data": {
+            "dim_trade_requests_disc": "meta_data"
+        },
+        "template_data": {
+            "dim_trade_requests_disc": "template_data"
+        },
+        "validations": {
+            "dim_trade_requests_disc": "validations"
+        },
+        "trade_identifiers": {
+            "dim_trade_requests_disc": "trade_identifiers"
+        },
+        "acceptance": {
+            "dim_trade_requests_disc": "acceptance"
+        },
+        "event_score_for_participants": {
+            "dim_trade_requests_disc": "event_score_for_participants"
+        },
+        "event_score_for_buyers": {
+            "dim_trade_requests_disc": "event_score_for_buyers"
+        },
+        "auction_analytics_json": {
+            "dim_trade_requests_disc": "auction_analytics_json"
         }
     }
 }

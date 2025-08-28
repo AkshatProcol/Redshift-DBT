@@ -679,3 +679,54 @@ models:
         description: "Scoring data specific to buyers in trading events (JSON/SUPER)"
       - name: auction_analytics_json
         description: "Auction analytics and performance metrics (JSON/SUPER)"
+
+  - name: dim_trade_requests_disc
+    description: "Trade request descriptive dimension table with complex trading configurations and analytics"
+    columns:
+      - name: id
+        description: "Primary key - Trade request ID (references fact_trade_requests)"
+        tests:
+          - not_null
+          - unique
+      - name: description
+        description: "Trade request description and details"
+      - name: company_trade_id
+        description: "Company-specific trade identifier"
+      - name: ref_id
+        description: "External reference ID"
+      - name: ip_info
+        description: "IP information of the requester"
+      - name: terms_and_conditions
+        description: "Terms and conditions for the trade (JSON/SUPER)"
+      - name: misc
+        description: "Miscellaneous trade request metadata (JSON/SUPER)"
+      - name: product_origins
+        description: "Product origin specifications (JSON/SUPER)"
+      - name: auction_config
+        description: "Auction configuration ID"
+      - name: config
+        description: "Trade request configuration settings (JSON/SUPER)"
+      - name: customised_audience
+        description: "Customized audience configuration ID"
+      - name: auction_rank_hash
+        description: "Auction ranking hash values (JSON/SUPER)"
+      - name: team_identifier
+        description: "Team identification data (JSON/SUPER)"
+      - name: widgets
+        description: "UI widget configurations for the trade (JSON/SUPER)"
+      - name: meta_data
+        description: "Trade request metadata and system information (JSON/SUPER)"
+      - name: template_data
+        description: "Template data for trade display (JSON/SUPER)"
+      - name: validations
+        description: "Validation rules and constraints (JSON/SUPER)"
+      - name: trade_identifiers
+        description: "Trade-specific identifiers and codes (JSON/SUPER)"
+      - name: acceptance
+        description: "Acceptance criteria and rules (JSON/SUPER)"
+      - name: event_score_for_participants
+        description: "Scoring data for trading event participants (JSON/SUPER)"
+      - name: event_score_for_buyers
+        description: "Scoring data specific to buyers (JSON/SUPER)"
+      - name: auction_analytics_json
+        description: "Auction analytics and performance metrics (JSON/SUPER)"
