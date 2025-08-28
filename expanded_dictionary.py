@@ -669,7 +669,8 @@ fact_table_mapping = {
     # =====================================================
     "orders": {
         "id": {
-            "fact_orders": "id"
+            "fact_orders": "id",
+            "dim_orders": "id"
         },
         "invoice_no": {
             "fact_orders": "invoice_no"
@@ -790,6 +791,37 @@ fact_table_mapping = {
         },
         "dms_upload_status": {
             "fact_orders": "dms_upload_status"
+        },
+        # Additional columns for dim_orders (descriptive attributes)
+        "quality_params": {
+            "dim_orders": "quality_params"
+        },
+        "terms_and_conditions": {
+            "dim_orders": "terms_and_conditions"
+        },
+        "purchase_order": {
+            "dim_orders": "purchase_order"
+        },
+        "price_breakup": {
+            "dim_orders": "price_breakup"
+        },
+        "po_details": {
+            "dim_orders": "po_details"
+        },
+        "template_data": {
+            "dim_orders": "template_data"
+        },
+        "order_items_summary": {
+            "dim_orders": "order_items_summary"
+        },
+        "other_details": {
+            "dim_orders": "other_details"
+        },
+        "contract_details": {
+            "dim_orders": "contract_details"
+        },
+        "meta_data": {
+            "dim_orders": "meta_data"
         }
     },
     

@@ -473,3 +473,32 @@ models:
         description: "Additional metadata and system information (JSON/SUPER)"
       - name: description_markdown
         description: "Event group description in Markdown format"
+
+  - name: dim_orders
+    description: "Order dimension table with complex order details and metadata"
+    columns:
+      - name: id
+        description: "Primary key - Order ID (references fact_orders)"
+        tests:
+          - not_null
+          - unique
+      - name: quality_params
+        description: "Product quality parameters and specifications (JSON/SUPER)"
+      - name: terms_and_conditions
+        description: "Order terms and conditions text"
+      - name: purchase_order
+        description: "Purchase order details and documentation (JSON/SUPER)"
+      - name: price_breakup
+        description: "Detailed price breakdown and calculations (JSON/SUPER)"
+      - name: po_details
+        description: "Purchase order administrative details (JSON/SUPER)"
+      - name: template_data
+        description: "Order template and format data (JSON/SUPER)"
+      - name: order_items_summary
+        description: "Summary of order items and quantities (JSON/SUPER)"
+      - name: other_details
+        description: "Additional order details and notes (JSON/SUPER)"
+      - name: contract_details
+        description: "Contract terms and legal details (JSON/SUPER)"
+      - name: meta_data
+        description: "Order metadata and system information (JSON/SUPER)"
