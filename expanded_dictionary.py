@@ -318,8 +318,54 @@ fact_table_mapping = {
     # CLASSIFICATION DATA → FACT_VENDOR ONLY
     # =====================================================
     "product_categories": {
+        "id": {
+            "dim_product_categories": "id"
+        },
         "name": {
-            "fact_vendor": "category_names"
+            "fact_vendor": "category_names",
+            "dim_product_categories": "name"
+        },
+        "ancestry": {
+            "dim_product_categories": "ancestry"
+        },
+        "status": {
+            "dim_product_categories": "status"
+        },
+        "created_at": {
+            "dim_product_categories": "created_at"
+        },
+        "updated_at": {
+            "dim_product_categories": "updated_at"
+        },
+        "hierarchy_type": {
+            "dim_product_categories": "hierarchy_type"
+        },
+        "alias": {
+            "dim_product_categories": "alias"
+        },
+        "origins": {
+            "dim_product_categories": "origins"
+        },
+        "gst": {
+            "dim_product_categories": "gst"
+        },
+        "image_url": {
+            "dim_product_categories": "image_url"
+        },
+        "category_type": {
+            "dim_product_categories": "category_type"
+        },
+        "quality_params": {
+            "dim_product_categories": "quality_params"
+        },
+        "company_id": {
+            "dim_product_categories": "company_id"
+        },
+        "is_default_category": {
+            "dim_product_categories": "is_default_category"
+        },
+        "category_code": {
+            "dim_product_categories": "category_code"
         }
     },
 

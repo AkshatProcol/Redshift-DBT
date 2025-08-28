@@ -572,3 +572,44 @@ models:
         description: "Product origin information (JSON/SUPER)"
       - name: terms_and_conditions
         description: "Product-specific terms and conditions (JSON/SUPER)"
+
+  - name: dim_product_categories
+    description: "Product category dimension table with hierarchical structure and attributes"
+    columns:
+      - name: id
+        description: "Primary key - Product category ID"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Category name"
+        tests:
+          - not_null
+      - name: ancestry
+        description: "Hierarchical ancestry path (e.g., '1/2/3' for nested categories)"
+      - name: status
+        description: "Category status (0=inactive, 1=active, etc.)"
+      - name: created_at
+        description: "Category creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: hierarchy_type
+        description: "Type of hierarchy structure"
+      - name: alias
+        description: "Category aliases and alternative names (JSON/SUPER)"
+      - name: origins
+        description: "Category origin information and sources (JSON/SUPER)"
+      - name: gst
+        description: "GST rate applicable to this category"
+      - name: image_url
+        description: "Category image URL"
+      - name: category_type
+        description: "Category classification type"
+      - name: quality_params
+        description: "Quality parameters for products in this category (JSON/SUPER)"
+      - name: company_id
+        description: "Company that owns/created the category (for custom categories)"
+      - name: is_default_category
+        description: "Whether this is a default system category"
+      - name: category_code
+        description: "Internal category code for classification"
