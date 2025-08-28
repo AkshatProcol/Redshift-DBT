@@ -623,6 +623,39 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # PRODUCT_QUALITIES TABLE → DIM_PRODUCT_QUALITIES
+    # =====================================================
+    "product_qualities": {
+        "id": {
+            "dim_product_qualities": "id"
+        },
+        "product_id": {
+            "dim_product_qualities": "product_id"
+        },
+        "params": {
+            "dim_product_qualities": "params"
+        },
+        "status": {
+            "dim_product_qualities": "status"
+        },
+        "created_at": {
+            "dim_product_qualities": "created_at"
+        },
+        "updated_at": {
+            "dim_product_qualities": "updated_at"
+        },
+        "name": {
+            "dim_product_qualities": "name"
+        },
+        "created_by_user_id": {
+            "dim_product_qualities": "created_by_user_id"
+        },
+        "attachments": {
+            "dim_product_qualities": "attachments"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},

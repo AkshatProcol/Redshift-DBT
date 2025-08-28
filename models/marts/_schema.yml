@@ -613,3 +613,32 @@ models:
         description: "Whether this is a default system category"
       - name: category_code
         description: "Internal category code for classification"
+
+  - name: dim_product_qualities
+    description: "Product quality dimension table with quality parameters and specifications"
+    columns:
+      - name: id
+        description: "Primary key - Product quality ID"
+        tests:
+          - not_null
+          - unique
+      - name: product_id
+        description: "Product ID this quality specification belongs to"
+        tests:
+          - not_null
+      - name: params
+        description: "Quality parameters and specifications (JSON/SUPER)"
+      - name: status
+        description: "Quality specification status (0=inactive, 1=active, etc.)"
+      - name: created_at
+        description: "Quality specification creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: name
+        description: "Quality specification name/title"
+        tests:
+          - not_null
+      - name: created_by_user_id
+        description: "User who created this quality specification"
+      - name: attachments
+        description: "Quality specification attachments and documents (JSON/SUPER)"
