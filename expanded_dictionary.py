@@ -140,8 +140,33 @@ fact_table_mapping = {
     # GEOGRAPHIC DATA → FACT_VENDOR ONLY
     # =====================================================
     "cities": {
+        "id": {
+            "dim_cities": "id"
+        },
         "name": {
-            "fact_vendor": "city_name"
+            "fact_vendor": "city_name",
+            "dim_cities": "name"
+        },
+        "coordinates": {
+            "dim_cities": "coordinates"
+        },
+        "status": {
+            "dim_cities": "status"
+        },
+        "apmc_configuration_id": {
+            "dim_cities": "apmc_configuration_id"
+        },
+        "state_id": {
+            "dim_cities": "state_id"
+        },
+        "country_id": {
+            "dim_cities": "country_id"
+        },
+        "created_at": {
+            "dim_cities": "created_at"
+        },
+        "updated_at": {
+            "dim_cities": "updated_at"
         }
     },
 

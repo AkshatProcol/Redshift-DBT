@@ -264,3 +264,32 @@ models:
         description: "Additional metadata (JSON/SUPER)"
       - name: dms_upload_status
         description: "Document Management System upload status"
+
+  - name: dim_cities
+    description: "City dimension table with geographic and administrative data"
+    columns:
+      - name: id
+        description: "Primary key - City ID"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "City name"
+        tests:
+          - not_null
+      - name: coordinates
+        description: "Geographic coordinates of the city"
+      - name: status
+        description: "City status code (active/inactive)"
+      - name: apmc_configuration_id
+        description: "APMC (Agricultural Produce Market Committee) configuration ID"
+      - name: state_id
+        description: "State ID where city is located"
+      - name: country_id
+        description: "Country ID where city is located"
+        tests:
+          - not_null
+      - name: created_at
+        description: "City record creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
