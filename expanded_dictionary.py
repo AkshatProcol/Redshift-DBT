@@ -498,6 +498,85 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # PRODUCTS TABLE → DIM_PRODUCTS & DIM_PRODUCTS_DISC
+    # =====================================================
+    "products": {
+        "id": {
+            "dim_products": "id",
+            "dim_products_disc": "id"
+        },
+        "name": {
+            "dim_products_disc": "name"
+        },
+        "product_type": {
+            "dim_products_disc": "product_type"
+        },
+        "product_code": {
+            "dim_products_disc": "product_code"
+        },
+        "image_url": {
+            "dim_products_disc": "image_url"
+        },
+        "alias": {
+            "dim_products_disc": "alias"
+        },
+        "article_code": {
+            "dim_products_disc": "article_code"
+        },
+        "update_remarks": {
+            "dim_products_disc": "update_remarks"
+        },
+        "audio_url": {
+            "dim_products_disc": "audio_url"
+        },
+        "hsn_code": {
+            "dim_products_disc": "hsn_code"
+        },
+        "description": {
+            "dim_products_disc": "description"
+        },
+        "options": {
+            "dim_products_disc": "options"
+        },
+        "misc": {
+            "dim_products_disc": "misc"
+        },
+        "quality_params": {
+            "dim_products_disc": "quality_params"
+        },
+        "origins": {
+            "dim_products_disc": "origins"
+        },
+        "terms_and_conditions": {
+            "dim_products_disc": "terms_and_conditions"
+        },
+        "status": {
+            "dim_products": "status"
+        },
+        "category_id": {
+            "dim_products": "category_id"
+        },
+        "company_id": {
+            "dim_products": "company_id"
+        },
+        "configuration_id": {
+            "dim_products": "configuration_id"
+        },
+        "created_at": {
+            "dim_products": "created_at"
+        },
+        "updated_at": {
+            "dim_products": "updated_at"
+        },
+        "created_by": {
+            "dim_products": "created_by"
+        },
+        "user_id": {
+            "dim_products": "user_id"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},

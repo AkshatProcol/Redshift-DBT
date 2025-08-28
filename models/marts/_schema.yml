@@ -502,3 +502,73 @@ models:
         description: "Contract terms and legal details (JSON/SUPER)"
       - name: meta_data
         description: "Order metadata and system information (JSON/SUPER)"
+
+  - name: dim_products
+    description: "Product dimension table with core product attributes"
+    columns:
+      - name: id
+        description: "Primary key - Product ID"
+        tests:
+          - not_null
+          - unique
+      - name: status
+        description: "Product status (0=inactive, 1=active, etc.)"
+      - name: category_id
+        description: "Product category ID"
+        tests:
+          - not_null
+      - name: company_id
+        description: "Company that owns/created the product"
+        tests:
+          - not_null
+      - name: configuration_id
+        description: "Product configuration ID"
+      - name: created_at
+        description: "Product creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: created_by
+        description: "User who created the product"
+      - name: user_id
+        description: "Primary user associated with the product"
+
+  - name: dim_products_disc
+    description: "Product descriptive dimension table with detailed attributes and metadata"
+    columns:
+      - name: id
+        description: "Primary key - Product ID (references dim_products)"
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Product name"
+        tests:
+          - not_null
+      - name: product_type
+        description: "Product type classification code"
+      - name: product_code
+        description: "Internal product code/SKU"
+      - name: image_url
+        description: "Product image URL"
+      - name: alias
+        description: "Product alias or alternative name"
+      - name: article_code
+        description: "Article code for inventory management"
+      - name: update_remarks
+        description: "Update notes and remarks"
+      - name: audio_url
+        description: "Product audio description URL"
+      - name: hsn_code
+        description: "HSN (Harmonized System of Nomenclature) code for taxation"
+      - name: description
+        description: "Product description and details (JSON/SUPER)"
+      - name: options
+        description: "Product options and variants (JSON/SUPER)"
+      - name: misc
+        description: "Miscellaneous product data and metadata (JSON/SUPER)"
+      - name: quality_params
+        description: "Product quality parameters and specifications (JSON/SUPER)"
+      - name: origins
+        description: "Product origin information (JSON/SUPER)"
+      - name: terms_and_conditions
+        description: "Product-specific terms and conditions (JSON/SUPER)"
