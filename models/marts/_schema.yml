@@ -790,3 +790,113 @@ models:
         description: "Last update timestamp for incremental processing"
       - name: trade_identifier
         description: "Trade-specific identifiers and metadata for this user-company relationship (SUPER/JSON)"
+
+  - name: dim_users
+    description: "User dimension table with comprehensive user profile and preference data"
+    columns:
+      - name: id
+        description: "Primary key - User ID"
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: "User first name"
+      - name: last_name
+        description: "User last name"
+      - name: firm_name
+        description: "User's firm or business name"
+      - name: email
+        description: "User email address"
+        tests:
+          - not_null
+      - name: phone
+        description: "User phone number"
+      - name: gender
+        description: "User gender (0=other, 1=male, 2=female, etc.)"
+      - name: category
+        description: "User category classification"
+      - name: city_id
+        description: "City ID where user is located"
+      - name: company_id
+        description: "Primary company ID associated with user"
+      - name: status
+        description: "User account status (0=inactive, 1=active, etc.)"
+      - name: role
+        description: "User role code within the system"
+      - name: email_verified
+        description: "Email verification status code"
+      - name: created_by_user
+        description: "User ID who created this user account"
+      - name: session_id
+        description: "Current or last session ID"
+      - name: access_mode
+        description: "User access mode configuration"
+      - name: terms_and_policy_accepted
+        description: "Terms and policy acceptance status"
+      - name: is_phone_verified
+        description: "Whether user's phone number is verified"
+      - name: is_email_verified
+        description: "Whether user's email address is verified"
+      - name: should_receive_sms
+        description: "User preference for receiving SMS notifications"
+      - name: should_receive_email
+        description: "User preference for receiving email notifications"
+      - name: should_receive_sims
+        description: "User preference for receiving SIM-related notifications"
+      - name: should_recieve_email
+        description: "Alternative spelling - User preference for receiving email notifications"
+      - name: send_whatsapp_msg
+        description: "User preference for receiving WhatsApp messages"
+      - name: is_mfa_enabled
+        description: "Whether multi-factor authentication is enabled"
+      - name: is_subscribed_to_zones
+        description: "Whether user is subscribed to zone-based notifications"
+      - name: created_at
+        description: "User account creation timestamp"
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: deleted_at
+        description: "Soft deletion timestamp (NULL if not deleted)"
+
+  - name: dim_users_disc
+    description: "User descriptive dimension table with complex profile data, security settings, and metadata"
+    columns:
+      - name: id
+        description: "Primary key - User ID (references dim_users)"
+        tests:
+          - not_null
+          - unique
+      - name: address
+        description: "User physical address"
+      - name: adderss
+        description: "Alternative spelling - User physical address (legacy column)"
+      - name: profile_pic_url
+        description: "URL to user's profile picture"
+      - name: referral_code
+        description: "User's referral code for inviting others"
+      - name: referal_code
+        description: "Alternative spelling - User's referral code (legacy column)"
+      - name: mfa_secret
+        description: "Multi-factor authentication secret key (encrypted)"
+      - name: user_access_right_id
+        description: "User access rights identifier (string format)"
+      - name: user_access_right_ids
+        description: "User access rights identifiers array (SUPER/JSON)"
+      - name: other_details
+        description: "Additional user profile details and custom attributes (SUPER/JSON)"
+      - name: team_identifiers
+        description: "Team identification data and membership information (SUPER/JSON)"
+      - name: tnc_and_policy_log
+        description: "Terms and conditions acceptance log and policy version history (SUPER/JSON)"
+      - name: ip_info
+        description: "User IP address information for security tracking"
+      - name: update_remarks
+        description: "Administrative notes and update remarks for user account changes"
+      - name: created_at
+        description: "User account creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: deleted_at
+        description: "Soft deletion timestamp (NULL if not deleted)"

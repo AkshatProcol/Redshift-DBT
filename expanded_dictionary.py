@@ -230,8 +230,138 @@ fact_table_mapping = {
     },
 
     # =====================================================
-    # USERS TABLE → FACT_VENDOR ONLY
+    # USERS TABLE → FACT_VENDOR & DIM_USERS
     # =====================================================
+    "users": {
+        "id": {
+            "dim_users": "id"
+        },
+        "first_name": {
+            "dim_users": "first_name"
+        },
+        "last_name": {
+            "dim_users": "last_name"
+        },
+        "firm_name": {
+            "dim_users": "firm_name"
+        },
+        "email": {
+            "dim_users": "email"
+        },
+        "phone": {
+            "dim_users": "phone"
+        },
+        "gender": {
+            "dim_users": "gender"
+        },
+        "category": {
+            "dim_users": "category"
+        },
+        "city_id": {
+            "dim_users": "city_id"
+        },
+        "company_id": {
+            "dim_users": "company_id"
+        },
+        "status": {
+            "dim_users": "status"
+        },
+        "role": {
+            "dim_users": "role"
+        },
+        "email_verified": {
+            "dim_users": "email_verified"
+        },
+        "created_by_user": {
+            "dim_users": "created_by_user"
+        },
+        "session_id": {
+            "dim_users": "session_id"
+        },
+        "access_mode": {
+            "dim_users": "access_mode"
+        },
+        "terms_and_policy_accepted": {
+            "dim_users": "terms_and_policy_accepted"
+        },
+        "is_phone_verified": {
+            "dim_users": "is_phone_verified"
+        },
+        "is_email_verified": {
+            "dim_users": "is_email_verified"
+        },
+        "should_receive_sms": {
+            "dim_users": "should_receive_sms"
+        },
+        "should_receive_email": {
+            "dim_users": "should_receive_email"
+        },
+        "should_receive_sims": {
+            "dim_users": "should_receive_sims"
+        },
+        "should_recieve_email": {
+            "dim_users": "should_recieve_email"
+        },
+        "send_whatsapp_msg": {
+            "dim_users": "send_whatsapp_msg"
+        },
+        "is_mfa_enabled": {
+            "dim_users": "is_mfa_enabled"
+        },
+        "is_subscribed_to_zones": {
+            "dim_users": "is_subscribed_to_zones"
+        },
+        "created_at": {
+            "dim_users": "created_at"
+        },
+        "updated_at": {
+            "dim_users": "updated_at"
+        },
+        "deleted_at": {
+            "dim_users": "deleted_at"
+        },
+        # Additional columns for dim_users_disc (descriptive attributes)
+        "address": {
+            "dim_users_disc": "address"
+        },
+        "adderss": {
+            "dim_users_disc": "adderss"
+        },
+        "profile_pic_url": {
+            "dim_users_disc": "profile_pic_url"
+        },
+        "referral_code": {
+            "dim_users_disc": "referral_code"
+        },
+        "referal_code": {
+            "dim_users_disc": "referal_code"
+        },
+        "mfa_secret": {
+            "dim_users_disc": "mfa_secret"
+        },
+        "user_access_right_id": {
+            "dim_users_disc": "user_access_right_id"
+        },
+        "user_access_right_ids": {
+            "dim_users_disc": "user_access_right_ids"
+        },
+        "other_details": {
+            "dim_users_disc": "other_details"
+        },
+        "team_identifiers": {
+            "dim_users_disc": "team_identifiers"
+        },
+        "tnc_and_policy_log": {
+            "dim_users_disc": "tnc_and_policy_log"
+        },
+        "ip_info": {
+            "dim_users_disc": "ip_info"
+        },
+        "update_remarks": {
+            "dim_users_disc": "update_remarks"
+        }
+    },
+
     "users_poc": {
         "id": {
             "fact_vendor": "poc_id"
