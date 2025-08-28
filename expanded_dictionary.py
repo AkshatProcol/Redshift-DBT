@@ -430,6 +430,74 @@ fact_table_mapping = {
     },
 
     # =====================================================
+    # EVENT_GROUPS TABLE → DIM_EVENT_GROUP
+    # =====================================================
+    "event_groups": {
+        "id": {
+            "dim_event_group": "id",
+            "dim_event_group_disc": "id"
+        },
+        "title": {
+            "dim_event_group": "title"
+        },
+        "status": {
+            "dim_event_group": "status"
+        },
+        "user_id": {
+            "dim_event_group": "user_id"
+        },
+        "company_id": {
+            "dim_event_group": "company_id"
+        },
+        "created_at": {
+            "dim_event_group": "created_at"
+        },
+        "updated_at": {
+            "dim_event_group": "updated_at"
+        },
+        "started_at": {
+            "dim_event_group": "started_at"
+        },
+        "closed_at": {
+            "dim_event_group": "closed_at"
+        },
+        "latest_stage_time": {
+            "dim_event_group": "latest_stage_time"
+        },
+        "ref_id": {
+            "dim_event_group": "ref_id"
+        },
+        # Additional columns for dim_event_group_disc (descriptive attributes)
+        "config": {
+            "dim_event_group_disc": "config"
+        },
+        "attachments": {
+            "dim_event_group_disc": "attachments"
+        },
+        "terms_and_conditions": {
+            "dim_event_group_disc": "terms_and_conditions"
+        },
+        "precomputed_data": {
+            "dim_event_group_disc": "precomputed_data"
+        },
+        "lot_config": {
+            "dim_event_group_disc": "lot_config"
+        },
+        "closed_by_id": {
+            "dim_event_group_disc": "closed_by_id"
+        },
+        "precomputed_data_v1": {
+            "dim_event_group_disc": "precomputed_data_v1"
+        },
+        "meta_data": {
+            "dim_event_group_disc": "meta_data"
+        },
+        "description_markdown": {
+            "dim_event_group_disc": "description_markdown"
+        }
+    },
+
+    # =====================================================
     # EMPTY TABLES (No dictionary mappings needed)
     # =====================================================
     "team_members": {},

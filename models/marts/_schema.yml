@@ -411,3 +411,65 @@ models:
         description: "Company record creation timestamp"
       - name: updated_at
         description: "Last update timestamp for incremental processing"
+
+  - name: dim_event_group
+    description: "Event group dimension table for trading sessions and auction events"
+    columns:
+      - name: id
+        description: "Primary key - Event group ID"
+        tests:
+          - not_null
+          - unique
+      - name: title
+        description: "Event group title/name"
+        tests:
+          - not_null
+      - name: status
+        description: "Event group status (0=inactive, 1=active, 2=closed, etc.)"
+      - name: user_id
+        description: "User who created/manages the event group"
+        tests:
+          - not_null
+      - name: company_id
+        description: "Company that owns the event group"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Event group creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: started_at
+        description: "Event group start timestamp"
+      - name: closed_at
+        description: "Event group closure timestamp"
+      - name: latest_stage_time
+        description: "Timestamp of the latest stage/phase in the event"
+      - name: ref_id
+        description: "External reference ID for integration purposes"
+
+  - name: dim_event_group_disc
+    description: "Event group descriptive dimension table with complex configuration and metadata"
+    columns:
+      - name: id
+        description: "Primary key - Event group ID (references dim_event_group)"
+        tests:
+          - not_null
+          - unique
+      - name: config
+        description: "Event group configuration settings and parameters (JSON/SUPER)"
+      - name: attachments
+        description: "Event group attachments and document references (JSON/SUPER)"
+      - name: terms_and_conditions
+        description: "Terms and conditions text for the event group"
+      - name: precomputed_data
+        description: "Precomputed analytics and summary data (JSON/SUPER)"
+      - name: lot_config
+        description: "Lot-specific configuration for auction events (JSON/SUPER)"
+      - name: closed_by_id
+        description: "User ID who closed the event group"
+      - name: precomputed_data_v1
+        description: "Version 1 precomputed data (legacy format, JSON/SUPER)"
+      - name: meta_data
+        description: "Additional metadata and system information (JSON/SUPER)"
+      - name: description_markdown
+        description: "Event group description in Markdown format"
