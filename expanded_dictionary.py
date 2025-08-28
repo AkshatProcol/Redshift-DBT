@@ -41,23 +41,53 @@ fact_table_mapping = {
     # BUYER_SELLER_COMPANY_MAPPINGS → FACT_VENDOR ONLY
     # =====================================================
     "buyer_seller_company_mappings": {
-        "vendor_code": {
-            "fact_vendor": "vendor_code"
-        },
-        "status": {
-            "fact_vendor": "joining_status_label"
-        },
-        "created_at": {
-            "fact_vendor": "network_joined_date"
-        },
-        "source": {
-            "fact_vendor": "source"
-        },
-        "invited_by": {
-            "fact_vendor": "invited_by,invited_by_name,invited_by_email"
+        "id": {
+            "dim_buyer_seller_company_mappings": "id"
         },
         "client_company_id": {
-            "fact_vendor": "client_company_id"
+            "fact_vendor": "client_company_id",
+            "dim_buyer_seller_company_mappings": "client_company_id"
+        },
+        "dealing_with_company_id": {
+            "dim_buyer_seller_company_mappings": "dealing_with_company_id"
+        },
+        "vendor_code": {
+            "fact_vendor": "vendor_code",
+            "dim_buyer_seller_company_mappings": "vendor_code"
+        },
+        "status": {
+            "fact_vendor": "joining_status_label",
+            "dim_buyer_seller_company_mappings": "status"
+        },
+        "created_at": {
+            "fact_vendor": "network_joined_date",
+            "dim_buyer_seller_company_mappings": "created_at"
+        },
+        "updated_at": {
+            "dim_buyer_seller_company_mappings": "updated_at"
+        },
+        "invited_by": {
+            "fact_vendor": "invited_by,invited_by_name,invited_by_email",
+            "dim_buyer_seller_company_mappings": "invited_by"
+        },
+        "source": {
+            "fact_vendor": "source",
+            "dim_buyer_seller_company_mappings": "source"
+        },
+        "auto_discount": {
+            "dim_buyer_seller_company_mappings": "auto_discount"
+        },
+        "vrp_code": {
+            "dim_buyer_seller_company_mappings": "vrp_code"
+        },
+        "integration_status": {
+            "dim_buyer_seller_company_mappings": "integration_status"
+        },
+        "meta_data": {
+            "dim_buyer_seller_company_mappings": "meta_data"
+        },
+        "dms_upload_status": {
+            "dim_buyer_seller_company_mappings": "dms_upload_status"
         }
     },
 

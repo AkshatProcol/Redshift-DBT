@@ -225,3 +225,42 @@ models:
         description: "User ID who created this hub"
       - name: user_id
         description: "Primary user associated with this hub"
+        
+  - name: dim_buyer_seller_company_mappings
+    description: "Buyer-seller company relationships and vendor mappings"
+    columns:
+      - name: id
+        description: "Primary key - Mapping ID"
+        tests:
+          - not_null
+          - unique
+      - name: client_company_id
+        description: "Client company ID (buyer)"
+        tests:
+          - not_null
+      - name: dealing_with_company_id
+        description: "Vendor/seller company ID"
+        tests:
+          - not_null
+      - name: vendor_code
+        description: "Vendor code assigned by client"
+      - name: status
+        description: "Mapping status (0=inactive, 1=active, etc.)"
+      - name: created_at
+        description: "Relationship creation timestamp"
+      - name: updated_at
+        description: "Last update timestamp for incremental processing"
+      - name: invited_by
+        description: "User ID who created this relationship"
+      - name: source
+        description: "Source of the relationship mapping"
+      - name: auto_discount
+        description: "Auto discount configuration details"
+      - name: vrp_code
+        description: "VRP (Vendor Registration Program) code"
+      - name: integration_status
+        description: "Integration status with external systems"
+      - name: meta_data
+        description: "Additional metadata (JSON/SUPER)"
+      - name: dms_upload_status
+        description: "Document Management System upload status"
