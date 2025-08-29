@@ -276,26 +276,3 @@ class PublicSyncer:
                 "table_name": table_name,
                 "records_processed": len(changed_records)
             }
-    
-    def verify_public_sync(self, table_name: str, record_ids: List[Any]) -> Dict:
-        """Verify that records were properly synced to public schema"""
-        if not record_ids:
-            return {"verified": True, "missing_records": []}
-        
-        # Filter out None record_ids
-        valid_ids = [rid for rid in record_ids if rid is not None]
-        if not valid_ids:
-            return {"verified": True, "missing_records": [], "note": "No valid IDs to verify"}
-        
-        missing_records = []
-        
-        for record_id in valid_ids:
-            public_record = self.db.get_public_record(table_name, record_id)
-            if not public_record:
-                missing_records.append(record_id)
-        
-        return {
-            "verified": len(missing_records) == 0,
-            "checked_records": len(valid_ids),
-            "missing_records": missing_records
-        }

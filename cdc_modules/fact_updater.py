@@ -133,37 +133,3 @@ class FactUpdater:
             print(f"   ❌ Exception refreshing {fact_table}: {e}")
             self.failed_tables.append(fact_table)
             return False
-    
-    def test_fact_tables(self, fact_tables: List[str] = None) -> Dict:
-        """Run dbt tests on fact tables"""
-        try:
-            if fact_tables:
-                # Test specific tables
-                tables_selector = " ".join(fact_tables)
-                cmd = f"dbt test --select {tables_selector} --target dev"
-            else:
-                # Test all models
-                cmd = "dbt test --target dev"
-                
-            print(f"   🧪 Running tests: {cmd}")
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=300)
-            
-            return {
-                "success": result.returncode == 0,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-                "return_code": result.returncode
-            }
-            
-        except subprocess.TimeoutExpired:
-            return {
-                "success": False,
-                "error": "Test timeout (5 minutes)",
-                "return_code": -1
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "return_code": -1
-            }

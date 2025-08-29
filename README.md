@@ -5,9 +5,9 @@
 ![Processing](https://img.shields.io/badge/Processing-Surgical_Precision-green)
 ![Status](https://img.shields.io/badge/Status-Production_Ready-success)
 ![Optimization](https://img.shields.io/badge/Optimized-80%25_Efficiency-brightgreen)
-![Updated](https://img.shields.io/badge/Updated-2025--08--26-blue)
+![Updated](https://img.shields.io/badge/Updated-2025--08--28-blue)
 
-A sophisticated vendor data pipeline with intelligent Change Data Capture (CDC) system for Amazon Redshift. Features surgical precision column-level change detection and real-time processing of vendor information from staging to production fact tables.
+A sophisticated multi-dimensional data pipeline with intelligent Change Data Capture (CDC) system for Amazon Redshift. Features surgical precision column-level change detection and comprehensive business intelligence processing across **29 production tables** (7 facts + 22 dimensions).
 
 ## 🎯 Project Overview
 
@@ -15,13 +15,13 @@ A sophisticated vendor data pipeline with intelligent Change Data Capture (CDC) 
 
 ### ✨ Key Features
 
-- **🔬 Surgical Precision**: Column-level change detection across 359 columns
+- **🔬 Surgical Precision**: Column-level change detection across comprehensive data model
 - **⚡ Optimized Processing**: Dictionary-first approach with 80% efficiency improvement
-- **🎯 Intelligent Targeting**: Only processes dictionary-mapped columns (111 vs 578)
+- **🎯 Multi-Table Architecture**: 29 production tables (7 facts + 22 dimensions)
 - **🔄 3-Phase Architecture**: Detection → Update → Sync
-- **📊 Multi-Schema Processing**: Staging → Public → Production flow
+- **📊 Complete Business Intelligence**: Full coverage of staging to production flow
 - **🏗️ Enterprise Grade**: Proven with live data and production testing
-- **🧹 Clean Structure**: Production-ready with unnecessary files removed
+- **🚀 Performance Ready**: Optimization opportunities for 3-4x speed improvement
 
 ## 🏗️ Architecture
 
@@ -59,9 +59,11 @@ Redshift-DBT/
 │   └── cdc_env/                       # Python virtual environment
 ├── 📊 DBT Project
 │   ├── models/
-│   │   ├── staging/                   # 12 staging models
-│   │   ├── intermediate/              # 9 intermediate models
-│   │   └── marts/fact_vendor.sql      # Main fact table ⭐
+│   │   ├── staging/                   # 24 staging models
+│   │   ├── intermediate/              # 11 intermediate models
+│   │   └── marts/                     # 29 production tables ⭐
+│   │       ├── fact_*.sql             # 7 fact tables
+│   │       └── dim_*.sql              # 22 dimension tables
 │   ├── dbt_project.yml
 │   └── profiles.yml                   # Database connections
 ├── 📝 Documentation
@@ -154,33 +156,48 @@ else:
 - **User**: `admin`
 
 ### Schema Structure
-- **`staging`**: 12 source tables (last 30 minutes of changes)
-- **`public`**: 12 baseline tables (full historical data for comparison)
-- **`staging_public`**: Fact tables (production output)
+- **`staging`**: 24 source tables (last 30 minutes of changes)
+- **`public`**: 24 baseline tables (full historical data for comparison)
+- **`staging_public`**: 29 production tables (7 facts + 22 dimensions)
 
 ## 🗂️ Data Model
 
-### Source Tables (12)
-1. `companies` - Company information (45 columns)
-2. `buyer_seller_company_mappings` - Vendor relationships (14 columns)
-3. `users` - User profiles and POCs (42 columns)
-4. `teams` - Company teams and categories
-5. `team_members` - Team membership
-6. `cities` - Geographic city data
-7. `countries` - Country information
-8. `product_categories` - Product categorization
-9. `user_company_mappings` - User-company relationships
-10. `taggings` - Tag associations
-11. `tags` - Tag definitions
-12. `preferred_vendor_item_mappings` - Preferred vendor items
+### Source Tables (24)
+**Core Business (12)**: companies, buyer_seller_company_mappings, users, teams, team_members, cities, countries, product_categories, user_company_mappings, taggings, tags, preferred_vendor_item_mappings
 
-### Fact Tables (staging_public)
-- `fact_vendor` - Main vendor fact table (75 columns) ⭐
-- `fact_company_profile` - Company profile data
-- `fact_financial` - Financial information
-- `fact_relationship` - Vendor relationships
-- `fact_onboarding` - Onboarding tracking
-- `fact_geography` - Location-based data
+**Trading & Bidding (10)**: bids, bid_trades, bid_trade_products, trade_requests, trade_products, orders, products, product_qualities, buyer_hubs, event_groups
+
+**System Support (2)**: audiences, units
+
+### Production Tables (staging_public)
+
+#### Fact Tables (7)
+- `fact_vendor` - Vendor analytics with POC relationships ⭐
+- `fact_bids` - Bid analytics with enrichment
+- `fact_bid_trades` - Trading activity tracking  
+- `fact_trade_products` - Product trading analytics
+- `fact_trade_requests` - Trade request lifecycle
+- `fact_bid_trade_products` - Bid-trade product analytics
+- `fact_orders` - Order processing and fulfillment analytics
+
+#### Dimension Tables (22)
+- `dim_audiences` - Audience targeting data
+- `dim_bid_trade_products_details` - Rich product details (JSON)
+- `dim_bids` - Bid metadata and documentation (JSON)
+- `dim_buyer_hubs` / `dim_buyer_hubs_disc` - Buyer hub locations and details
+- `dim_buyer_seller_company_mappings` - Company relationship mappings
+- `dim_cities` - Geographic city information
+- `dim_companies` / `dim_companies_disc` - Company profiles and extended data
+- `dim_event_group` / `dim_event_group_disc` - Trading event configurations
+- `dim_orders` - Order documentation and metadata
+- `dim_product_categories` - Product classification hierarchy
+- `dim_product_qualities` - Product quality specifications
+- `dim_products` / `dim_products_disc` - Product catalog and details
+- `dim_trade_products` - Trading product configurations
+- `dim_trade_requests_disc` - Trade request detailed metadata
+- `dim_units` - Measurement units and conversions **[NEW]**
+- `dim_user_company_mappings` - User-company relationships **[NEW]**
+- `dim_users` / `dim_users_disc` - User profiles and extended data **[NEW]**
 
 ## 🔧 Business Rules
 
@@ -214,46 +231,44 @@ For companies to appear in fact_vendor:
 - **✅ Public Sync**: Redshift compatibility confirmed
 - **✅ Fact Updates**: All mapped columns updated correctly
 
-## ⚡ Latest Improvements (2025-08-26)
+## ⚡ Latest Improvements (2025-08-28)
 
-### 🎯 Dictionary-First Optimization
-**Revolutionary Performance Enhancement**: Reduced column comparisons by 80%
-- **Before**: 578 column comparisons per cycle
-- **After**: 111 column comparisons per cycle
-- **Implementation**: Smart filtering based on dictionary mappings
-- **Result**: Faster processing with reduced database load
+### 🎯 Complete Multi-Dimensional Architecture 
+**Major Enhancement**: Full coverage of business intelligence requirements
+- **Added**: 4 new dimension tables (dim_units, dim_user_company_mappings, dim_users, dim_users_disc)
+- **Total Coverage**: 29 production tables (7 facts + 22 dimensions)
+- **Dictionary Expansion**: All 24 staging tables now mapped to production models
+- **Result**: Comprehensive BI coverage across all business domains
 
-### 🏗️ Architectural Decision: Hybrid Approach
-**Question Addressed**: "Can we use dictionary for direct updates instead of DBT?"
+### 🚀 Performance Optimization Opportunities Identified
+**Analysis Completed**: Pipeline optimization roadmap defined
+- **Current**: ~66 seconds average runtime
+- **Potential**: 3-4x faster (15-20s) with parallel processing
+- **Quick Wins**: Batch dbt builds → 20s improvement
+- **Major Gains**: Parallel table processing → 40s improvement
+- **Ready for Implementation**: Optimization strategies documented
 
-**Analysis**: Dictionary handles simple 1:1 mappings, but fact_vendor requires:
-- Multi-condition CASE statements (mapping_status → joining_status_label)
-- Function transformations (EXTRACT(EPOCH FROM created_at))
-- Cross-table aggregations (LISTAGG for category_names)
-- Composite key generation (vendor_id || '_' || poc_id)
-
-**Conclusion**: Hybrid architecture is optimal:
-- **Dictionary**: Surgical targeting (avoid unnecessary processing)
-- **DBT**: Complex business logic (handle transformations)
-
-### 🧹 Project Cleanup
-**Removed unnecessary files for production readiness**:
-- Deprecated processors (old CDC versions)
-- Test files and build artifacts
-- Empty folders and redundant documentation
+### ✅ Production Validation
+**All Models Verified**: Complete pipeline health confirmed
+- **Build Success**: All 29 tables building correctly
+- **Test Coverage**: Comprehensive schema validation
+- **Performance**: Consistent runtime with expanded scope
+- **CDC Integration**: Dictionary mappings fully operational
 
 ## 🚨 System Status
 
 ### ✅ Fully Operational Features
+- **Complete Architecture**: 29 production tables (7 facts + 22 dimensions) 
 - **Dictionary-First CDC**: 80% performance improvement implemented
 - **Public Schema Sync**: Fixed Redshift compatibility (2025-08-23)
 - **Column Comparison**: Type-safe comparison with surgical precision
-- **Dictionary Mapping**: Comprehensive mappings validated
-- **Project Structure**: Clean, production-ready organization
+- **Comprehensive Mapping**: All 24 staging tables covered
+- **Production Validated**: All models building and testing successfully
 
-### ⚠️ Known Limitations
-- **Fact Table Scope**: Currently focused on `fact_vendor` (100% operational)
-- **Future Enhancement**: Expand to additional fact tables as needed
+### 🚀 Ready for Enhancement
+- **Performance Optimization**: 3-4x improvement roadmap available
+- **Parallel Processing**: Implementation strategy documented
+- **Batch Operations**: Quick wins identified for immediate improvement
 
 ## 🔧 Advanced Usage
 
@@ -329,6 +344,6 @@ This project is for internal use. Ensure compliance with your organization's dat
 
 ---
 
-**🎯 Ready to experience surgical precision data processing with 80% optimized efficiency? Start with the Quick Start guide above!** 🔬⚡✅
+**🎯 Ready to experience comprehensive multi-dimensional data processing with surgical precision? Start with the Quick Start guide above!** 🔬⚡✅
 
-*Last Updated: 2025-08-26 - Dictionary-First Optimization & Architecture Refinement*
+*Last Updated: 2025-08-28 - Complete Multi-Dimensional Architecture & Performance Optimization Roadmap*

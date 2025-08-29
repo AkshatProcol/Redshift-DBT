@@ -9,26 +9,25 @@ from .database_connector import DatabaseConnector
 from .change_detector import ChangeDetector
 from .fact_updater import FactUpdater
 from .public_syncer import PublicSyncer
+from .table_discovery import TableDiscovery
 
 
 class CDCOrchestrator:
     def __init__(self, dictionary_mapping: Dict, db_config: Dict = None):
         """Initialize CDC orchestrator with all components"""
         self.mapping = dictionary_mapping
-        self.staging_tables = [
-            'companies', 'buyer_seller_company_mappings', 'users', 'teams',
-            'team_members', 'cities', 'countries', 'product_categories',
-            'user_company_mappings', 'taggings', 'tags', 'preferred_vendor_item_mappings',
-            'bids', 'bid_trades', 'buyer_hubs', 'event_groups', 'bid_trade_products',
-            'audiences', 'orders', 'product_qualities', 'products', 'trade_products',
-            'trade_requests', 'units'
-        ]
         
-        # Initialize components
+        # Initialize components first (needed for table discovery)
         self.db = DatabaseConnector(db_config)
         self.change_detector = ChangeDetector(self.db, dictionary_mapping)
         self.fact_updater = FactUpdater(self.db)
         self.public_syncer = PublicSyncer(self.db)
+        
+        # Initialize table discovery with database connection and dictionary
+        self.table_discovery = TableDiscovery(self.db, dictionary_mapping)
+        
+        # Smart staging table discovery with fallback
+        self.staging_tables = self.table_discovery.discover_staging_tables()
         
         print("🔄 CDC Orchestrator - Surgical Precision + Public Schema Sync")
         print("🎯 3-Phase Process: Detection → Update → Sync")
@@ -253,3 +252,4 @@ class CDCOrchestrator:
             print("   ⚠️  Overall health: ISSUES DETECTED")
         
         return health_results
+
