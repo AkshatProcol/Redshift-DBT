@@ -27,9 +27,8 @@ cdc_modules/
 ├── public_syncer.py              # Schema synchronization (160 lines) 
 └── cdc_orchestrator.py           # Main coordination (250 lines)
 
-Entry Points:
-├── cdc_main.py                    # Modern CLI interface (100 lines)
-└── complete_cdc_processor.py     # Legacy compatibility (60 lines)
+Entry Point:
+└── cdc_main.py                    # Modern CLI interface (100 lines)
 ```
 
 ## 🎯 Module Responsibilities
@@ -115,13 +114,13 @@ python cdc_main.py --output results.json
 python cdc_main.py --verbose
 ```
 
-### **Legacy Compatibility**
+### **Production Deployment**
 ```bash
-# Exact same interface as before
-python complete_cdc_processor.py
+# Modern deployment with cdc_main.py
+*/30 * * * * cd /path/to/Redshift-DBT && source cdc_env/bin/activate && python cdc_main.py >> cdc.log 2>&1
 
-# Works with existing scripts and cron jobs
-*/30 * * * * cd /path/to/Redshift-DBT && python complete_cdc_processor.py
+# Health monitoring
+*/5 * * * * cd /path/to/Redshift-DBT && source cdc_env/bin/activate && python cdc_main.py --health-check
 ```
 
 ### **Programmatic Usage**
@@ -206,7 +205,21 @@ python cdc_main.py --table companies
 
 The monolithic CDC processor has been successfully transformed into a maintainable, testable, and extensible modular architecture while preserving 100% functionality and performance optimizations.
 
-**Old file backed up**: `complete_cdc_processor_original_backup.py`  
-**New system active**: Full backward compatibility maintained
+## 🧹 **Project Cleanup (2025-08-31)**
 
-✅ **Ready for production with enhanced maintainability!**
+### **Removed Legacy Files**
+The following files have been removed to streamline the project:
+
+1. **`complete_cdc_processor_original_backup.py`** - Legacy monolithic processor backup
+2. **`complete_cdc_processor.py`** - Legacy wrapper (replaced by `cdc_main.py`)
+3. **`run_pipeline.sh`** - Standalone dbt script (integrated into Python modules)
+4. **`.user.yml`** - User-specific configuration file
+
+### **Updated Architecture Benefits**
+- **Cleaner Project**: Removed 28.8KB of unused legacy code
+- **Single Entry Point**: `cdc_main.py` is the only active interface
+- **Integrated DBT**: No separate shell scripts needed
+- **Modern CLI**: Full argument parsing and health checks
+- **Production Validated**: Timezone fixes and comprehensive testing completed
+
+✅ **Production-ready modular architecture with streamlined codebase!**

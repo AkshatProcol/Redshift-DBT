@@ -23,9 +23,8 @@ cdc_modules/
 ├── public_syncer.py              # Schema sync
 └── cdc_orchestrator.py           # Main coordination
 
-Entry Points:
-├── cdc_main.py                   # Modern CLI interface
-└── complete_cdc_processor.py     # Legacy wrapper
+Entry Point:
+└── cdc_main.py                   # Modern CLI interface
 ```
 
 ## 🔧 **Key Technologies**
@@ -158,5 +157,35 @@ python cdc_main.py --health-check
 2. **Parallel Processing**: Process 3-4 tables simultaneously → 40s improvement  
 3. **Connection Pooling**: Optimize database connections → 5s improvement
 4. **Smart Caching**: Skip unchanged tables → 10s improvement
+
+## 🧹 **Project Cleanup (2025-08-31)**
+
+### **Removed Legacy Files**
+The following unused files have been cleaned up to streamline the project:
+
+1. **`complete_cdc_processor_original_backup.py`** (25,379 bytes)
+   - Legacy monolithic processor backup
+   - Replaced by modular architecture in cdc_modules/
+
+2. **`complete_cdc_processor.py`** (2,542 bytes) 
+   - Legacy wrapper for backward compatibility
+   - Modern entry point: `cdc_main.py`
+
+3. **`run_pipeline.sh`** (894 bytes)
+   - Standalone dbt script
+   - DBT operations now integrated in Python CDC modules
+
+4. **`.user.yml`** (41 bytes)
+   - User-specific configuration file
+   - Should not be committed to repository
+
+**Total Space Saved**: ~28.8 KB + reduced project complexity
+
+### **Production Validation (2025-08-31)**
+- ✅ **Timezone Fix**: Sync timestamps now stored in IST (fixed UTC mismatch)
+- ✅ **Testing Complete**: Validated with audiences, bids, products, tags tables
+- ✅ **No Duplicate Processing**: CDC correctly ignores already-processed changes
+- ✅ **Modular Architecture**: All components working seamlessly
+- ✅ **Documentation Updated**: README and project files reflect current state
 
 The system provides comprehensive business intelligence across vendor management, trading analytics, order processing, and product intelligence with automatic table management and surgical precision change detection.
