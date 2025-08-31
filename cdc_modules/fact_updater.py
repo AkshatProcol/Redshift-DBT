@@ -1,18 +1,27 @@
 """
 Fact Updater Module
 Handles DBT fact table updates with surgical precision targeting
+Now with optional transactional support via TransactionalFactUpdater
 """
 
 import subprocess
 from typing import Dict, List
+from .transactional_fact_updater import TransactionalFactUpdater
 
 
 class FactUpdater:
-    def __init__(self, database_connector=None):
+    def __init__(self, database_connector=None, use_transactions=True):
         """Initialize fact table updater"""
         self.updated_tables = []
         self.failed_tables = []
         self.db = database_connector
+        self.use_transactions = use_transactions
+        
+        # Initialize transactional updater if requested
+        if self.use_transactions and self.db:
+            self.transactional_updater = TransactionalFactUpdater(database_connector)
+        else:
+            self.transactional_updater = None
         
     def is_fact_table_empty(self, fact_table: str) -> bool:
         """Check if a fact table is empty or doesn't exist"""
@@ -68,8 +77,22 @@ class FactUpdater:
             self.failed_tables.append(fact_table)
             return False
     
+
     def update_targeted_fact_tables(self, targeted_updates: Dict[str, List[str]]) -> Dict:
-        """Update fact tables based on targeted changes"""
+        """
+        Update fact tables based on targeted changes
+        Uses transactional updater if available, otherwise falls back to legacy mode
+        """
+        # Use transactional updater if available
+        if self.transactional_updater:
+            return self.transactional_updater.transactional_update(targeted_updates)
+        
+        # Legacy non-transactional mode
+        print("⚠️  Running in legacy non-transactional mode")
+        return self._legacy_update_targeted_fact_tables(targeted_updates)
+    
+    def _legacy_update_targeted_fact_tables(self, targeted_updates: Dict[str, List[str]]) -> Dict:
+        """Legacy non-transactional update method (for backward compatibility)"""
         if not targeted_updates:
             print("⚡ No fact table updates needed - no relevant changes detected")
             return {

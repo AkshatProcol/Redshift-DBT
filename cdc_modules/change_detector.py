@@ -84,43 +84,98 @@ class ChangeDetector:
         if data_type.lower() in ['boolean', 'bool']:
             return bool(staging_val) != bool(public_val)
         
+        # Handle numeric types (int vs float comparison)
+        if data_type.lower() in ['integer', 'int', 'bigint', 'smallint', 'numeric', 'decimal', 'float', 'double', 'real']:
+            try:
+                return float(staging_val) != float(public_val)
+            except (ValueError, TypeError):
+                pass  # Fall back to string comparison
+        
         # Convert to string for safe comparison
         return str(staging_val) != str(public_val)
     
+    def filter_records_by_sync_time(self, records: List[Dict], last_sync_timestamp: str) -> List[Dict]:
+        """Filter records to only include those changed since last sync
+        
+        Note: Both sync timestamps and data timestamps should be in the same timezone
+        for accurate comparison. Sync timestamps are now stored in local timezone (IST)
+        to match data creation timestamps.
+        """
+        from datetime import datetime
+        
+        try:
+            last_sync_dt = datetime.fromisoformat(last_sync_timestamp.replace('T', ' ').replace('Z', ''))
+        except:
+            print(f"   ⚠️ Invalid sync timestamp format: {last_sync_timestamp}")
+            return records  # Return all records if timestamp is invalid
+        
+        filtered_records = []
+        for record in records:
+            should_process = False
+            record_id = record.get('id', 'NULL')
+            
+            # For records with IDs, check updated_at timestamp
+            if record.get('id') is not None:
+                updated_at = record.get('updated_at')
+                if updated_at and updated_at > last_sync_dt:
+                    should_process = True
+                    print(f"   🔄 Record {record_id}: updated {updated_at} (after last sync)")
+                else:
+                    print(f"   ⏭️ Record {record_id}: unchanged since last sync - skipping")
+            
+            # For NULL ID records, check created_at timestamp  
+            else:
+                created_at = record.get('created_at')
+                if created_at and created_at > last_sync_dt:
+                    should_process = True
+                    print(f"   🆕 Record {record_id}: created {created_at} (after last sync)")
+                else:
+                    print(f"   ⏭️ Record {record_id}: created before last sync - skipping")
+            
+            if should_process:
+                filtered_records.append(record)
+        
+        return filtered_records
+    
     def get_targeted_fact_updates(self, table_name: str, changed_columns: List[str]) -> Dict[str, List[str]]:
-        """Get targeted fact table updates based on changed columns"""
+        """Get targeted fact AND dimension table updates based on changed columns"""
         if table_name not in self.mapping:
             return {}
         
         table_mapping = self.mapping[table_name]
         targeted_updates = {}
         
-        # For each changed column, see which fact tables it maps to
+        # For each changed column, see which fact AND dimension tables it maps to
         for column in changed_columns:
             if column in table_mapping:
-                fact_mappings = table_mapping[column]
+                table_mappings = table_mapping[column]
                 
-                for fact_table, fact_columns in fact_mappings.items():
-                    if fact_table not in targeted_updates:
-                        targeted_updates[fact_table] = []
+                for target_table, target_columns in table_mappings.items():
+                    if target_table not in targeted_updates:
+                        targeted_updates[target_table] = []
                     
-                    if isinstance(fact_columns, str):
-                        if ',' in fact_columns:
-                            targeted_updates[fact_table].extend(fact_columns.split(','))
+                    if isinstance(target_columns, str):
+                        if ',' in target_columns:
+                            targeted_updates[target_table].extend(target_columns.split(','))
                         else:
-                            targeted_updates[fact_table].append(fact_columns)
+                            targeted_updates[target_table].append(target_columns)
                     else:
-                        targeted_updates[fact_table].append(str(fact_columns))
+                        targeted_updates[target_table].append(str(target_columns))
         
         # Remove duplicates
-        for fact_table in targeted_updates:
-            targeted_updates[fact_table] = [col.strip() for col in set(targeted_updates[fact_table])]
+        for target_table in targeted_updates:
+            targeted_updates[target_table] = [col.strip() for col in set(targeted_updates[target_table])]
         
         return targeted_updates
     
     def analyze_table_changes(self, table_name: str) -> Dict:
-        """Analyze all changes for a specific table"""
+        """Analyze all changes for a specific table with sync timestamp optimization"""
         print(f"🔍 Analyzing changes in {table_name}...")
+        
+        # Get last sync timestamp for optimization
+        last_sync_timestamp = self.db.get_last_sync_timestamp(table_name)
+        if last_sync_timestamp:
+            print(f"   📅 Last sync: {last_sync_timestamp}")
         
         # Get table structure and records
         columns = self.db.get_table_structure(table_name)
@@ -136,6 +191,24 @@ class ChangeDetector:
                 "total_comparisons": 0,
                 "table_skipped": True,
                 "skip_reason": "empty_staging_table"
+            }
+        
+        # Filter records based on sync timestamp
+        if last_sync_timestamp:
+            filtered_records = self.filter_records_by_sync_time(changed_records, last_sync_timestamp)
+            if len(filtered_records) < len(changed_records):
+                skipped_count = len(changed_records) - len(filtered_records)
+                print(f"   ⚡ Performance optimization: filtered out {skipped_count} unchanged records")
+                changed_records = filtered_records
+                
+        if not changed_records:
+            print(f"   ✅ All records up-to-date since last sync - SKIPPING")
+            return {
+                "records_processed": 0, 
+                "changes_detected": 0,
+                "total_comparisons": 0,
+                "table_skipped": True,
+                "skip_reason": "all_records_current"
             }
         
         # Analyze each record

@@ -38,22 +38,6 @@ class CompleteCDCProcessor:
         """Health check - delegates to orchestrator"""
         return self.orchestrator.run_health_check()
     
-    # Expose individual components for advanced usage
-    @property
-    def change_detector(self):
-        return self.orchestrator.change_detector
-    
-    @property
-    def fact_updater(self):
-        return self.orchestrator.fact_updater
-    
-    @property
-    def public_syncer(self):
-        return self.orchestrator.public_syncer
-    
-    @property
-    def db_connector(self):
-        return self.orchestrator.db
 
 
 def main():

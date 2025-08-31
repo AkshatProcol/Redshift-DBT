@@ -106,20 +106,22 @@ class CDCOrchestrator:
         print(f"   Records analyzed: {total_records}")
         print(f"   Column comparisons: {total_comparisons} (dictionary-optimized)")
         print(f"   Changes detected: {total_changes}")
-        print(f"   Fact tables targeted: {len(all_targeted_updates)}")
+        fact_count = sum(1 for table in all_targeted_updates.keys() if table.startswith("fact_"))
+        dim_count = sum(1 for table in all_targeted_updates.keys() if table.startswith("dim_"))
+        print(f"   Tables targeted: {len(all_targeted_updates)} ({fact_count} fact + {dim_count} dimension)")
         
         # =====================================================
-        # 🎯 PHASE 2: TARGETED FACT TABLE UPDATES  
+        # 🎯 PHASE 2: TARGETED TABLE UPDATES (FACT & DIMENSION)
         # =====================================================
         print("\\n" + "="*60)
-        print("🎯 PHASE 2: TARGETED FACT TABLE UPDATES")
+        print("🎯 PHASE 2: TARGETED TABLE UPDATES (FACT & DIMENSION)")
         print("="*60)
         
         fact_update_result = self.fact_updater.update_targeted_fact_tables(all_targeted_updates)
         results["phase_2_updates"] = fact_update_result
         
         print(f"\\n📊 Phase 2 Summary:")
-        print(f"   Fact tables processed: {fact_update_result.get('fact_tables_processed', 0)}")
+        print(f"   Tables processed: {fact_update_result.get('fact_tables_processed', 0)}")
         print(f"   Successful updates: {fact_update_result.get('successful_updates', 0)}")
         print(f"   Failed updates: {fact_update_result.get('failed_updates', 0)}")
         
@@ -134,12 +136,37 @@ class CDCOrchestrator:
         total_synced = 0
         total_sync_failures = 0
         
-        for table_name, changed_records in all_public_sync_data.items():
-            sync_result = self.public_syncer.sync_public_schema(table_name, changed_records)
-            sync_results[table_name] = sync_result
+        # 🔐 CRITICAL: Only sync public schema if fact updates succeeded
+        transaction_status = fact_update_result.get("transaction_status", "unknown")
+        fact_updates_succeeded = (
+            fact_update_result.get("failed_updates", 0) == 0 and
+            transaction_status not in ["validation_failed", "backup_failed", "rollback_success", "rollback_failed"]
+        )
+        
+        if fact_updates_succeeded:
+            print("   ✅ Fact table updates successful - proceeding with public schema sync")
             
-            total_synced += sync_result.get("sync_success", 0)
-            total_sync_failures += sync_result.get("sync_failures", 0)
+            for table_name, changed_records in all_public_sync_data.items():
+                sync_result = self.public_syncer.sync_public_schema(table_name, changed_records)
+                sync_results[table_name] = sync_result
+                
+                total_synced += sync_result.get("sync_success", 0)
+                total_sync_failures += sync_result.get("sync_failures", 0)
+        else:
+            print("   ⚠️  Fact table updates failed - SKIPPING public schema sync to maintain consistency")
+            print(f"   📊 Transaction status: {transaction_status}")
+            print("   🔒 Public schema will remain at previous state for next CDC cycle")
+            
+            # Mark all tables as skipped
+            for table_name in all_public_sync_data.keys():
+                sync_results[table_name] = {
+                    "success": False,
+                    "skipped": True,
+                    "reason": f"Fact updates failed with status: {transaction_status}",
+                    "records_processed": 0,
+                    "sync_success": 0,
+                    "sync_failures": 0
+                }
         
         results["phase_3_sync"] = sync_results
         
@@ -224,13 +251,27 @@ class CDCOrchestrator:
             print("   ❌ Database connection: FAILED")
             return health_results
         
-        # Check staging tables
+        # Check staging tables (lightweight connectivity test)
         for table_name in self.staging_tables:
-            records = self.db.get_changed_records(table_name)
-            health_results["staging_tables"][table_name] = {
-                "accessible": len(records) >= 0,
-                "record_count": len(records)
-            }
+            try:
+                # Quick connectivity test instead of full record retrieval
+                conn = self.db.get_connection()
+                cursor = conn.cursor()
+                cursor.execute(f"SELECT COUNT(*) FROM staging.{table_name} LIMIT 1")
+                count = cursor.fetchone()[0] if cursor.rowcount > 0 else 0
+                cursor.close()
+                conn.close()
+                
+                health_results["staging_tables"][table_name] = {
+                    "accessible": True,
+                    "record_count": count
+                }
+            except Exception as e:
+                health_results["staging_tables"][table_name] = {
+                    "accessible": False,
+                    "record_count": 0,
+                    "error": str(e)
+                }
         
         # Check dictionary mapping
         for table_name in self.staging_tables:

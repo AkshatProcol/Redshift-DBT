@@ -137,3 +137,72 @@ class DatabaseConnector:
             if conn:
                 conn.close()
             return None
+    
+    def get_last_sync_timestamp(self, table_name: str, schema_name: str = 'public') -> Optional[str]:
+        """Get the last sync timestamp for a table"""
+        conn = self.get_connection()
+        if not conn:
+            return None
+            
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT last_sync_timestamp 
+                FROM cdc_metadata.table_sync_history 
+                WHERE table_name = %s AND schema_name = %s
+            """, (table_name, schema_name))
+            
+            result = cursor.fetchone()
+            cursor.close()
+            conn.close()
+            
+            if result:
+                return result[0].isoformat() if result[0] else None
+            return None
+            
+        except Exception as e:
+            print(f"❌ Error getting last sync timestamp for {table_name}: {e}")
+            if conn:
+                conn.close()
+            return None
+    
+    def update_sync_timestamp(self, table_name: str, records_synced: int, 
+                             sync_duration: float, cdc_run_id: str, 
+                             schema_name: str = 'public', sync_status: str = 'SUCCESS') -> bool:
+        """Update the last sync timestamp for a table"""
+        conn = self.get_connection()
+        if not conn:
+            return False
+            
+        try:
+            from datetime import datetime
+            cursor = conn.cursor()
+            
+            # Use local timezone (IST) to match data timestamps
+            current_timestamp = datetime.now()
+            
+            # Use UPSERT pattern for Redshift compatibility
+            cursor.execute("""
+                DELETE FROM cdc_metadata.table_sync_history 
+                WHERE table_name = %s AND schema_name = %s
+            """, (table_name, schema_name))
+            
+            cursor.execute("""
+                INSERT INTO cdc_metadata.table_sync_history 
+                (table_name, schema_name, last_sync_timestamp, records_synced, 
+                 sync_duration_seconds, cdc_run_id, sync_status, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """, (table_name, schema_name, current_timestamp, records_synced, sync_duration, cdc_run_id, sync_status, current_timestamp))
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error updating sync timestamp for {table_name}: {e}")
+            if conn:
+                conn.rollback()
+                conn.close()
+            return False
+    

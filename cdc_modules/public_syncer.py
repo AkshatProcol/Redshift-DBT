@@ -85,6 +85,9 @@ class PublicSyncer:
         This guarantees that ALL column changes reach public schema,
         even if they don't trigger fact table updates.
         """
+        import time
+        sync_start_time = time.time()
+        
         if not changed_records:
             return {
                 "success": True,
@@ -256,13 +259,34 @@ class PublicSyncer:
             if sync_failures > 0:
                 print(f"   ⚠️  {sync_failures} sync failures")
             
+            # Record sync timestamp for future optimization
+            sync_duration = time.time() - sync_start_time
+            cdc_run_id = f"cdc_{time.strftime('%Y%m%d_%H%M%S')}"
+            sync_status = 'SUCCESS' if sync_failures == 0 else 'PARTIAL'
+            
+            timestamp_recorded = self.db.update_sync_timestamp(
+                table_name=table_name,
+                records_synced=sync_success,
+                sync_duration=sync_duration,
+                cdc_run_id=cdc_run_id,
+                sync_status=sync_status
+            )
+            
+            if timestamp_recorded:
+                print(f"   📅 Sync timestamp recorded for {table_name} ({sync_duration:.2f}s)")
+            else:
+                print(f"   ⚠️ Failed to record sync timestamp for {table_name}")
+            
             return {
                 "success": sync_failures == 0,
                 "table_name": table_name,
                 "records_processed": len(changed_records),
                 "sync_success": sync_success,
                 "sync_failures": sync_failures,
-                "sync_details": sync_details
+                "sync_details": sync_details,
+                "sync_duration": sync_duration,
+                "cdc_run_id": cdc_run_id,
+                "timestamp_recorded": timestamp_recorded
             }
             
         except Exception as e:
